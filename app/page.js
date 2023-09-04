@@ -14,12 +14,13 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="bg-white">
+    <div className="h-screen w-screen bg-gradient-to-b
+    from-blue-900 to-blue-100">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="">ALFIE</span>
+              <span className="text-white">ALFIE</span>
               {/* <img
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -54,8 +55,9 @@ export default function Home() {
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-              MENU <span aria-hidden="true">&rarr;</span>
+            <a href="#" className="text-sm font-semibold leading-6 text-white">
+              MENU
+               {/* <span aria-hidden="true">&rarr;</span> */}
             </a>
           </div>
         </nav>
@@ -120,7 +122,7 @@ export default function Home() {
           </h2>
         </div> */}
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border rounded-md p-3">
           <form className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -173,7 +175,7 @@ export default function Home() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
       
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <a href="#" className="font-semibold leading-6 text-white hover:text-black">
               Need Help
             </a>
           </p>
