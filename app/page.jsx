@@ -22,8 +22,8 @@ export default function Home() {
   return (
     // <div className="h-screen w-screen bg-gradient-to-b
     // from-blue-900 to-blue-100">
-    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom">
-      	 {/* bg-[url('/cbimage.png')] */}
+    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom bg-[url('/cbimage.png')]">
+      	 {/*  */}
       <header className="absolute inset-x-0 top-0 z-50">
         <nav
           className="flex items-center justify-between p-6 lg:px-8"
@@ -54,7 +54,7 @@ export default function Home() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               {/* <img className="h-28 w-auto" src="/logo.png" alt="" /> */}
-              {/* <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} /> */}
+              <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -98,7 +98,7 @@ export default function Home() {
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
                 {/* <img className="h-16 w-auto" src="/logo.png" alt="" /> */}
-                {/* <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} /> */}
+                <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
               </a>
               <button
                 type="button"

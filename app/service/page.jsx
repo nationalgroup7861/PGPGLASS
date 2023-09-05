@@ -63,7 +63,7 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		">
+    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		bg-[url('/cbimage.png')]">
       {/* bg-[url('/cbimage.png')] */}
       <header>
         <nav
@@ -74,7 +74,7 @@ export default function Example() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               {/* <img className="h-20 w-auto" src="/logo.png" alt="" /> */}
-              {/* <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} /> */}
+              <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -268,7 +268,7 @@ export default function Example() {
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                   alt=""
                 /> */}
-                {/* <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} /> */}
+                <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
               </a>
               <button
                 type="button"
