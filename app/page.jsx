@@ -7,6 +7,7 @@ import {
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -21,7 +22,7 @@ export default function Home() {
   return (
     // <div className="h-screen w-screen bg-gradient-to-b
     // from-blue-900 to-blue-100">
-    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		 bg-[url('/cbimage.png')]">
+    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom	 bg-[url('/cbimage.png')]">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav
           className="flex items-center justify-between p-6 lg:px-8"
@@ -51,7 +52,8 @@ export default function Home() {
 
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img className="h-28 w-auto" src="/logo.png" alt="" />
+              {/* <img className="h-28 w-auto" src="/logo.png" alt="" /> */}
+              <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -64,10 +66,7 @@ export default function Home() {
               <div className="drawer-content flex ">
                 <div className="flex gap-3">
                   <span className="text-white mt-1">MENU</span>
-                  <label
-                    htmlFor="my-drawer-4"
-                    className="text-black"
-                  >
+                  <label htmlFor="my-drawer-4" className="text-black">
                     <Bars3Icon className="h-8 w-8" aria-hidden="true" />
                   </label>
                 </div>
@@ -84,8 +83,6 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-
-          
           </div>
         </nav>
         <Dialog
@@ -99,11 +96,8 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  className="h-16 w-auto"
-                  src="/logo.png"
-                  alt=""
-                />
+                {/* <img className="h-16 w-auto" src="/logo.png" alt="" /> */}
+                <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
               </a>
               <button
                 type="button"
@@ -143,7 +137,6 @@ export default function Home() {
 
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div className="flex min-h-full flex-1 flex-col justify-center mt-5 px-6 py-12 lg:px-8">
-       
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border rounded-md p-3">
             <form className="space-y-6" action="#" method="POST">
               <div>
@@ -168,19 +161,19 @@ export default function Home() {
 
               <div>
                 <div className="mt-2">
-                <div class="relative">
+                  <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <LockClosedIcon className="h-7 w-7" aria-hidden="true" />
                     </div>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    placeholder="Password"
-                    required
-                    className="block rounded-full border-0 pl-12 py-1.5 text-gray-900 shadow-sm ring-1 input-bordered input-lg w-full  ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="Password"
+                      required
+                      className="block rounded-full border-0 pl-12 py-1.5 text-gray-900 shadow-sm ring-1 input-bordered input-lg w-full  ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
                   </div>
                 </div>
               </div>

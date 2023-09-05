@@ -16,6 +16,7 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
+import Image from "next/image";
 
 const products = [
   {
@@ -71,7 +72,8 @@ export default function Example() {
           <div className="flex w-20 ">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img className="h-20 w-auto" src="/logo.png" alt="" />
+              {/* <img className="h-20 w-auto" src="/logo.png" alt="" /> */}
+              <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -85,10 +87,10 @@ export default function Example() {
             </button>
           </div>
           <div className="flex rounded-full ring-2  lg:flex-1 lg:gap-x-12 p-4 bg-gradient-to-r from-blue-800 to-blue-950 ">
-            <div class="flex w-full items-center justify-start lg:w-auto lg:flex-grow">
+            <div className="flex w-full items-center justify-start lg:w-auto lg:flex-grow">
               <a
                 href="#"
-                class="w-full items-center justify-center rounded px-3 py-2 text-white  hover:text-white  lg:w-auto"
+                className="w-full items-center justify-center rounded px-3 py-2 text-white  hover:text-white  lg:w-auto"
               >
                 <span className="">SUDIP</span>
                 <br></br>
@@ -233,10 +235,10 @@ export default function Example() {
               </a>
             </Popover.Group>
 
-            <div class="flex w-full items-center justify-end lg:w-auto lg:flex-grow">
+            <div className="flex w-full items-center justify-end lg:w-auto lg:flex-grow">
               <a
                 href="#"
-                class="w-full items-center justify-center rounded px-3 py-2 text-white  hover:text-white lg:inline-flex lg:w-auto"
+                className="w-full items-center justify-center rounded px-3 py-2 text-white  hover:text-white lg:inline-flex lg:w-auto"
               >
                 <span>ALFIE</span>
               </a>
@@ -260,11 +262,12 @@ export default function Example() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
+                {/* <img
                   className="h-8 w-auto"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                   alt=""
-                />
+                /> */}
+                <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
               </a>
               <button
                 type="button"
@@ -384,9 +387,13 @@ export default function Example() {
           <a className="tab tab-active rounded-full  text-black bg-white">
             Market Research
           </a>
-          <a className="tab rounded-full bg-white  text-black">Competitor Information</a>
+          <a className="tab rounded-full bg-white  text-black">
+            Competitor Information
+          </a>
           <a className="tab rounded-full  bg-white  text-black">New Trend </a>
-          <a className="tab rounded-full  bg-white  text-black">Import Export</a>
+          <a className="tab rounded-full  bg-white  text-black">
+            Import Export
+          </a>
         </div>
         <div className="flex flex-row gap-6 mt-5">
           <div className="card w-96 bg-base-100 shadow-xl ring-8 ring-yellow-300 ">
@@ -398,7 +405,7 @@ export default function Example() {
                 5 years and projection for next 3 years?
               </p>
               <div className="card-actions justify-start">
-                <div class="flex text-center">
+                <div className="flex text-center">
                   <UserIcon className="h-5 w-5 mt-0" aria-hidden="true" />
                   <span className="text-base">PGP Glass</span>
                 </div>
@@ -409,10 +416,13 @@ export default function Example() {
             <div className="card-body bg-blue-900 flex-col w-full rounded-xl">
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
-              <p> What is total Market Growth For [Category] in [Region] for last
-                5 years and projection for next 3 years?</p>
+              <p>
+                {" "}
+                What is total Market Growth For [Category] in [Region] for last
+                5 years and projection for next 3 years?
+              </p>
               <div className="card-actions justify-start">
-                <div class="flex text-center">
+                <div className="flex text-center">
                   <UserIcon className="h-5 w-5 mt-0" aria-hidden="true" />
                   <span className="text-base">PGP Glass</span>
                 </div>
@@ -423,10 +433,13 @@ export default function Example() {
             <div className="card-body bg-blue-900 flex-col w-full rounded-xl">
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
-              <p> What is total Market Growth For [Category] in [Region] for last
-                5 years and projection for next 3 years? </p>
+              <p>
+                {" "}
+                What is total Market Growth For [Category] in [Region] for last
+                5 years and projection for next 3 years?{" "}
+              </p>
               <div className="card-actions justify-start">
-                <div class="flex text-center">
+                <div className="flex text-center">
                   <UserIcon className="h-5 w-5 mt-0" aria-hidden="true" />
                   <span className="text-base">PGP Glass</span>
                 </div>
