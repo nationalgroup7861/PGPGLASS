@@ -63,7 +63,8 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		bg-[url('/cbimage.png')]">
+    <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		">
+      {/* bg-[url('/cbimage.png')] */}
       <header>
         <nav
           className="mx-auto flex max-w-full items-center justify-between p-6 lg:px-8"
