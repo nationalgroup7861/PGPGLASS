@@ -54,7 +54,7 @@ export default function Home() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               {/* <img className="h-28 w-auto" src="/logo.png" alt="" /> */}
-              <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
+              {/* <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} /> */}
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -98,7 +98,7 @@ export default function Home() {
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
                 {/* <img className="h-16 w-auto" src="/logo.png" alt="" /> */}
-                <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
+                {/* <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} /> */}
               </a>
               <button
                 type="button"
@@ -142,8 +142,8 @@ export default function Home() {
             <form className="space-y-6" action="#" method="POST">
               <div>
                 <div className="mt-2">
-                  <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
                     </div>
 
@@ -162,8 +162,8 @@ export default function Home() {
 
               <div>
                 <div className="mt-2">
-                  <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <LockClosedIcon className="h-7 w-7" aria-hidden="true" />
                     </div>
                     <input
