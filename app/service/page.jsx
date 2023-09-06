@@ -347,7 +347,7 @@ export default function Example() {
           <h4 className="font-medium lg:text-2xl text-xl capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4"></h4>
           <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
             <select className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs">
-              <option disabled selected>
+              <option disabled value="SAS">
                 SAS
               </option>
               <option>SAS</option>
@@ -355,7 +355,7 @@ export default function Example() {
             </select>
 
             <select className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs">
-              <option disabled selected>
+              <option disabled value="MEXICO">
                 MEXICO
               </option>
               <option>MEXICO</option>
@@ -366,12 +366,12 @@ export default function Example() {
 
         <div className="flex justify-between flex-wrap items-center mb-6 ml-10 gap-3">
           <h4 className="font-medium  text-lg capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4">
-            Query Here:{" "}
+            Query Here:
           </h4>
           <span className="flex-1 text-xl">
             What is the total market growth for Specialty Alcoholic Spirits
             (SAS) in Mexico for the last 5 years, and what is the projection for
-            the next 3 years?"
+            the next 3 years?
           </span>
           <div className="flex flex-col space-y-1 sm:justify-end items-center ">
             <button className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500">
@@ -418,7 +418,6 @@ export default function Example() {
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
               <p>
-                {" "}
                 What is total Market Growth For [Category] in [Region] for last
                 5 years and projection for next 3 years?
               </p>
@@ -435,9 +434,8 @@ export default function Example() {
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
               <p>
-                {" "}
                 What is total Market Growth For [Category] in [Region] for last
-                5 years and projection for next 3 years?{" "}
+                5 years and projection for next 3 years ?
               </p>
               <div className="card-actions justify-start">
                 <div className="flex text-center">

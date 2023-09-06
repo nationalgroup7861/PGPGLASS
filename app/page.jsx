@@ -23,7 +23,7 @@ export default function Home() {
     // <div className="h-screen w-screen bg-gradient-to-b
     // from-blue-900 to-blue-100">
     <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom bg-[url('/cbimage.png')]">
-      	 {/*  */}
+      	
       <header className="absolute inset-x-0 top-0 z-50">
         <nav
           className="flex items-center justify-between p-6 lg:px-8"
