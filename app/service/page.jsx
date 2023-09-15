@@ -17,50 +17,61 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
-
-const products = [
+// chatgpt 4, Bard, internalGPT
+const chat_menu = [
   {
-    name: "Analytics",
-    description: "Get a better understanding of your traffic",
+    name: "Chatgpt 4",
+    description: "Explore the power of ChatGPT-4.",
     href: "#",
     icon: ChartPieIcon,
   },
   {
-    name: "Engagement",
-    description: "Speak directly to your customers",
+    name: "Bard",
+    description: "Unleash creativity with Bard, the next-level AI storyteller",
     href: "#",
     icon: CursorArrowRaysIcon,
   },
   {
-    name: "Security",
-    description: "Your customers’ data will be safe and secure",
+    name: "InternalGPT",
+    description:
+      "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     href: "#",
     icon: FingerPrintIcon,
   },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools",
-    href: "#",
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will convert",
-    href: "#",
-    icon: ArrowPathIcon,
-  },
 ];
+
 const callsToAction = [
   { name: "Watch demo", href: "#", icon: PlayCircleIcon },
   { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
+
+const cardData = [
+  {
+    statement:
+      "What is total Market Growth For [Category] in [Region] for the last 5 years and projection for the next 3 years?",
+    icon: UserIcon, // Replace with your actual icon component
+  },
+  {
+    statement: "[Category] Producers of the same in the [Region] with their revenue,EBIDTA, PAT for last 5 years and projection for next 3 years",
+    icon: UserIcon, // Replace with your actual icon component
+  },
+  {
+    statement: "Are their any major regulatory restriction for importing [Category] bottles into [Region] from India or Srilanka?.",
+    icon: UserIcon, // Replace with your actual icon component
+  },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Service() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(0);
+
+  const handleCardClick = (index) => {
+    setSelectedCard(index);
+  };
 
   return (
     <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		bg-[url('/cbimage.png')]">
@@ -119,7 +130,7 @@ export default function Example() {
                 >
                   <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                     <div className="p-4">
-                      {products.map((item) => (
+                      {chat_menu.map((item) => (
                         <div
                           key={item.name}
                           className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
@@ -145,7 +156,7 @@ export default function Example() {
                         </div>
                       ))}
                     </div>
-                    <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                    {/* <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
                       {callsToAction.map((item) => (
                         <a
                           key={item.name}
@@ -159,7 +170,7 @@ export default function Example() {
                           {item.name}
                         </a>
                       ))}
-                    </div>
+                    </div> */}
                   </Popover.Panel>
                 </Transition>
               </Popover>
@@ -182,8 +193,8 @@ export default function Example() {
                   leaveTo="opacity-0 translate-y-1"
                 >
                   <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                      {products.map((item) => (
+                    {/* <div className="p-4">
+                      {chat_menu.map((item) => (
                         <div
                           key={item.name}
                           className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
@@ -208,7 +219,7 @@ export default function Example() {
                           </div>
                         </div>
                       ))}
-                    </div>
+                    </div> */}
                     <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
                       {callsToAction.map((item) => (
                         <a
@@ -369,9 +380,10 @@ export default function Example() {
             Query Here:
           </h4>
           <span className="flex-1 text-xl">
-            What is the total market growth for Specialty Alcoholic Spirits
+            {/* What is the total market growth for Specialty Alcoholic Spirits
             (SAS) in Mexico for the last 5 years, and what is the projection for
-            the next 3 years?
+            the next 3 years? */}
+            {cardData[selectedCard].statement}
           </span>
           <div className="flex flex-col space-y-1 sm:justify-end items-center ">
             <button className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500">
@@ -397,11 +409,11 @@ export default function Example() {
           </a>
         </div>
         <div className="flex flex-row gap-6 mt-5">
-          <div className="card w-96 bg-base-100 shadow-xl ring-8 ring-yellow-300 ">
+          {/* <div className="card w-96 bg-base-100 shadow-xl ring-8 ring-yellow-300 ">
             <div className="card-body  bg-blue-900 flex-col w-full rounded-xl">
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
-              <p>
+              <p className="text-white">
                 What is total Market Growth For [Category] in [Region] for last
                 5 years and projection for next 3 years?
               </p>
@@ -417,7 +429,7 @@ export default function Example() {
             <div className="card-body bg-blue-900 flex-col w-full rounded-xl">
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
-              <p>
+              <p className="text-white">
                 What is total Market Growth For [Category] in [Region] for last
                 5 years and projection for next 3 years?
               </p>
@@ -433,7 +445,7 @@ export default function Example() {
             <div className="card-body bg-blue-900 flex-col w-full rounded-xl">
               <div className="divider  w-full  right-0  top-0 left-0 bottom-0 m-0 p-0"></div>
               <h2 className="card-title"></h2>
-              <p>
+              <p className="text-white">
                 What is total Market Growth For [Category] in [Region] for last
                 5 years and projection for next 3 years ?
               </p>
@@ -444,7 +456,33 @@ export default function Example() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          {cardData.map((card, index) => (
+            <div
+              key={index}
+              className={`card w-96 bg-base-100 shadow-xl ${
+                selectedCard === index
+                  ? "ring-8 ring-yellow-300"
+                  : "ring-1 ring-blue-100"
+              }`}
+            >
+              <div
+                className="card-body bg-blue-900 flex-col w-full rounded-xl"
+                onClick={() => handleCardClick(index)}
+              >
+                <div className="divider w-full right-0 top-0 left-0 bottom-0 m-0 p-0"></div>
+                <h2 className="card-title"></h2>
+                <p className="text-white">{card.statement}</p>
+                <div className="card-actions justify-start">
+                  <div className="flex text-center">
+                    <card.icon className="h-5 w-5 mt-0" aria-hidden="true" />
+                    <span className="text-base">PGP Glass</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
