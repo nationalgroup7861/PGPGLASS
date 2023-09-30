@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
   ArrowPathIcon,
@@ -17,6 +17,32 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
+import ProductListbox from "../component/listbox/ProductListbox";
+
+const selectToSAS = [
+  { id: 1, name: "Beer Bottle" },
+  { id: 2, name: "Cosmetic" },
+  { id: 3, name: "Perfumery" },
+  { id: 4, name: "Food Jars" },
+  { id: 5, name: "Speciality liquor" },
+  { id: 6, name: "Vine" },
+  { id: 7, name: "Nail polish" },
+  { id: 8, name: "Room freshener" },
+  { id: 9, name: "Pharma bottle" },
+];
+const selectToCountry = [
+  { id: 1, name: "Mexico" },
+  { id: 2, name: "United States" },
+  { id: 3, name: "UAE" },
+  { id: 4, name: "Canada" },
+  { id: 5, name: "Brazil" },
+  { id: 6, name: "Europe" },
+  { id: 7, name: "France" },
+  { id: 8, name: "China" },
+  { id: 9, name: "Vietnam" },
+  { id: 10, name: "Spain" },
+];
+
 // chatgpt 4, Bard, internalGPT
 const chat_menu = [
   {
@@ -52,11 +78,13 @@ const cardData = [
     icon: UserIcon, // Replace with your actual icon component
   },
   {
-    statement: "[Category] Producers of the same in the [Region] with their revenue,EBIDTA, PAT for last 5 years and projection for next 3 years",
+    statement:
+      "[Category] Producers of the same in the [Region] with their revenue,EBIDTA, PAT for last 5 years and projection for next 3 years",
     icon: UserIcon, // Replace with your actual icon component
   },
   {
-    statement: "Are their any major regulatory restriction for importing [Category] bottles into [Region] from India or Srilanka?.",
+    statement:
+      "Are their any major regulatory restriction for importing [Category] bottles into [Region] from India or Srilanka?.",
     icon: UserIcon, // Replace with your actual icon component
   },
 ];
@@ -68,10 +96,40 @@ function classNames(...classes) {
 export default function Service() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(0);
+  const [selectedSasValue, setSelectedSasValue] = useState(selectToSAS[0].name);
+  const [selectedCountryValue, setSelectedCOuntryValue] = useState(
+    selectToCountry[0].name
+  );
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSasValue = (event) => {
+    setSelectedSasValue(event.target.value);
+  };
+
+  const handleCountryValue = (event) => {
+    setSelectedCOuntryValue(event.target.value);
+  };
 
   const handleCardClick = (index) => {
     setSelectedCard(index);
   };
+
+  const [editableStatement, setEditableStatement] = useState(
+    cardData[selectedCard].statement
+  );
+
+  // Function to handle changes in the editable statement
+  const handleEditableStatementChange = (event) => {
+    setEditableStatement(event.target.value);
+  };
+
+  useEffect(() => {
+    const computedValue = cardData[selectedCard].statement
+      .replace("[Category]", selectedSasValue)
+      .replace("[Region]", selectedCountryValue);
+
+    setInputValue(computedValue);
+  }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
   return (
     <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom		bg-[url('/cbimage.png')]">
@@ -357,20 +415,27 @@ export default function Service() {
         <div className="flex justify-between flex-wrap items-center mb-6 mr-20">
           <h4 className="font-medium lg:text-2xl text-xl capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4"></h4>
           <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
-            <select className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs">
-              <option disabled value="SAS">
-                SAS
-              </option>
-              <option>SAS</option>
-              <option>Lost</option>
+            <select
+              value={selectedSasValue}
+              onChange={handleSasValue}
+              className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs"
+            >
+              {selectToSAS.map((option, index) => (
+                <option key={index} value={option.name}>
+                  {option.name}
+                </option>
+              ))}
             </select>
-
-            <select className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs">
-              <option disabled value="MEXICO">
-                MEXICO
-              </option>
-              <option>MEXICO</option>
-              <option>MEXICO</option>
+            <select
+              value={selectedCountryValue}
+              onChange={handleCountryValue}
+              className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs"
+            >
+              {selectToCountry.map((option, index) => (
+                <option key={index} value={option.name}>
+                  {option.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -380,10 +445,21 @@ export default function Service() {
             Query Here:
           </h4>
           <span className="flex-1 text-xl">
-            {/* What is the total market growth for Specialty Alcoholic Spirits
-            (SAS) in Mexico for the last 5 years, and what is the projection for
-            the next 3 years? */}
-            {cardData[selectedCard].statement}
+            {/* {cardData[selectedCard].statement.replace("[Category]", selectedSasValue).replace("[Region]", selectedCountryValue)} */}
+
+            {/* <input
+              type="text"
+              className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-100"
+              value={inputValue}
+            /> */}
+
+            <textarea
+              className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-300"
+              value={inputValue}
+              rows="1" // Set the number of visible rows here
+              onChange={e => setInputValue(e.target.value)}
+
+            />
           </span>
           <div className="flex flex-col space-y-1 sm:justify-end items-center ">
             <button className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500">
