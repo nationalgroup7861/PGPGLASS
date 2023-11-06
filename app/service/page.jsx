@@ -1,23 +1,22 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
+import {
+  Bars3Icon,
+  ChartPieIcon,
+  CursorArrowRaysIcon,
+  FingerPrintIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { BardAPI } from "bardapi";
 import Image from "next/image";
-import ProductListbox from "../component/listbox/ProductListbox";
+import OpenAI from "openai";
+import { Fragment, useEffect, useState } from "react";
 
 const selectToSAS = [
   { id: 1, name: "Beer Bottle" },
@@ -101,6 +100,7 @@ export default function Service() {
     selectToCountry[0].name
   );
   const [inputValue, setInputValue] = useState("");
+  const [outputValue, setOutputValue] = useState("");
 
   const handleSasValue = (event) => {
     setSelectedSasValue(event.target.value);
@@ -121,6 +121,48 @@ export default function Service() {
   // Function to handle changes in the editable statement
   const handleEditableStatementChange = (event) => {
     setEditableStatement(event.target.value);
+  };
+
+  useEffect(() => {
+    GetOpenAi("Who is the Prime Minister of India?");
+    // GetBardAi("Demo");
+  }, []);
+
+  async function GetOpenAi(query) {
+    const openai = new OpenAI({
+      apiKey: "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",
+      dangerouslyAllowBrowser: true,
+    });
+
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: "user", content: query }],
+      model: "gpt-3.5-turbo",
+    });
+    console.log(chatCompletion.choices[0].message["content"]);
+
+    return chatCompletion.choices[0].message["content"];
+  }
+
+  async function GetBardAi(query) {
+    const sessionId =
+      "bwiljy8gRLlrOygs9OVilTDS6G-BE8XiP4PYy5IZdUclAzq9dNCKIzSgjtajz6pGhBYzvA.";
+    const bard = new BardAPI({ sessionId });
+
+    const message = "Your message here";
+    bard.ask({ message }).then((response) => {
+      console.log("Response:", response.response);
+      console.log("Conversation ID:", response.conversationId);
+      console.log("Response ID:", response.responseId);
+      console.log("Choice ID:", response.choiceId);
+      console.log("Other Choices:", response.otherChoices);
+    });
+  }
+
+  const handelQueryChange = async (name, row) => {
+    console.log(row);
+    const answer = await  GetOpenAi(row);
+    console.log(answer)
+    setOutputValue(answer);
   };
 
   useEffect(() => {
@@ -457,12 +499,14 @@ export default function Service() {
               className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-300"
               value={inputValue}
               rows="1" // Set the number of visible rows here
-              onChange={e => setInputValue(e.target.value)}
-
+              onChange={(e) => setInputValue(e.target.value)}
             />
           </span>
           <div className="flex flex-col space-y-1 sm:justify-end items-center ">
-            <button className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500">
+            <button
+              className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500"
+              onClick={() => handelQueryChange("ChatGpt", inputValue)}
+            >
               Query
             </button>
             <button className="btn bg-slate-400 px-5 py-0 rounded-full normal-case hover:bg-gray-500">
@@ -470,7 +514,16 @@ export default function Service() {
             </button>
           </div>
         </div>
-
+        {outputValue && (
+          <div className="flex justify-between flex-wrap items-center mb-6 ml-10 ">
+            <textarea
+              className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-300"
+              value={outputValue}
+              rows="3" // Set the number of visible rows here
+              onChange={(e) => setOutputValue(e.target.value)}
+            />
+          </div>
+        )}
         <div className="tabs gap-2">
           <a className="tab rounded-full  bg-white text-black ">All</a>
           <a className="tab tab-active rounded-full  text-black bg-white">
