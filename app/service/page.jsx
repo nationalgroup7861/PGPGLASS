@@ -101,6 +101,7 @@ export default function Service() {
   );
   const [inputValue, setInputValue] = useState("");
   const [outputValue, setOutputValue] = useState("");
+  const [chatHistory, setChatHistory] = useState([]); // To store chat history
 
   const handleSasValue = (event) => {
     setSelectedSasValue(event.target.value);
@@ -138,7 +139,6 @@ export default function Service() {
       messages: [{ role: "user", content: query }],
       model: "gpt-3.5-turbo",
     });
-    console.log(chatCompletion.choices[0].message["content"]);
 
     return chatCompletion.choices[0].message["content"];
   }
@@ -159,10 +159,15 @@ export default function Service() {
   }
 
   const handelQueryChange = async (name, row) => {
-    console.log(row);
-    const answer = await  GetOpenAi(row);
-    console.log(answer)
+    // console.log(row);
+    const answer = await GetOpenAi(row);
     setOutputValue(answer);
+
+    setChatHistory((prevChatHistory) => [
+      ...prevChatHistory,
+      { role: "user", content: inputValue },
+      { role: "ai", content: answer },
+    ]);
   };
 
   useEffect(() => {
@@ -514,7 +519,7 @@ export default function Service() {
             </button>
           </div>
         </div>
-        {outputValue && (
+        {/* {outputValue && (
           <div className="flex justify-between flex-wrap items-center mb-6 ml-10 ">
             <textarea
               className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-300"
@@ -523,7 +528,27 @@ export default function Service() {
               onChange={(e) => setOutputValue(e.target.value)}
             />
           </div>
-        )}
+        )} */}
+
+        <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-white">
+          {chatHistory.map((message, index) => (
+            <div
+              key={index}
+              className={`mb-2 ${
+                message.role === "user" ? "text-left" : "text-right"
+              }`}
+            >
+              <span
+                className={`${
+                  message.role === "user" ? "bg-blue-500" : "bg-green-500"
+                } text-white px-4 py-2 rounded-lg inline-block`}
+              >
+                {message.content}
+              </span>
+            </div>
+          ))}
+        </div>
+
         <div className="tabs gap-2">
           <a className="tab rounded-full  bg-white text-black ">All</a>
           <a className="tab tab-active rounded-full  text-black bg-white">
