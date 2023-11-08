@@ -461,7 +461,7 @@ export default function Service() {
                     </div>
                 </div>
 
-                {chatHistory && <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent">
+                {chatHistory.length > 0 && <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent">
                     {chatHistory.map((message, index) => (
                         <div
                             key={index}
