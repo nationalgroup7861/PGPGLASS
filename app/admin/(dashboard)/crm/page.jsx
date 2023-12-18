@@ -1,12 +1,11 @@
 "use client";
 
-import Card from "@/components/ui/Card";
-import GroupChart3 from "@/components/partials/widget/chart/group-chart-3";
-import SelectMonth from "@/components/partials/SelectMonth";
-import StackBarChart from "@/components/partials/widget/chart/stack-bar";
-import Calculation from "@/components/partials/widget/chart/Calculation";
-import ExampleTwo from "@/components/partials/table/ExampleTwo";
 import HomeBredCurbs from "@/components/partials/HomeBredCurbs";
+import SelectMonth from "@/components/partials/SelectMonth";
+import ExampleTwo from "@/components/partials/table/ExampleTwo";
+import Calculation from "@/components/partials/widget/chart/Calculation";
+import GroupChart3 from "@/components/partials/widget/chart/group-chart-3";
+import Card from "@/components/ui/Card";
 const campaigns = [
   {
     name: "Channel",
