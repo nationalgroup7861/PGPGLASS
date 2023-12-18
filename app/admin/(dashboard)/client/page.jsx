@@ -282,7 +282,7 @@ const ClientPage = () => {
               className=" btn-dark font-normal btn-sm "
               iconClass="text-lg"
               onClick={() => {
-                router.push("/invoice-add");
+                router.push("/client-add");
               }}
             />
           </div>
