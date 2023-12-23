@@ -29,9 +29,9 @@ const SidebarLogo = ({ menuHover }) => {
         <div className="flex items-center space-x-4">
           <div className="logo-icon">
             {!isDark && !isSemiDark ? (
-              <img src="/logo.png" alt="" width={"100px"} height={"100px"}/>
+              <img src="/logo.svg" alt="" width={"100px"} height={"50px"}/>
             ) : (
-              <img src="/logo.png" alt="" width={"100px"} height={"100px"} />
+              <img src="/logo-white.svg" alt="" width={"100px"} height={"50px"} />
             )}
           </div>
 

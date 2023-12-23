@@ -14,6 +14,7 @@ import {
 import { BardAPI } from "bardapi";
 import OpenAI from "openai";
 import { useEffect, useState } from "react";
+import FullscreenDialog from "./FullscreenDialog";
 
 const selectToSAS = [
   { id: 1, name: "Beer Bottle" },
@@ -180,16 +181,17 @@ export default function Service() {
 
   return (
     // <div className="lg:h-screen lg:w-screen bg-cover bg-repeat bg-bottom bg-[url('/cbimage.png')]">
-    <div className="min-h-screen bg-[url('/cbimage.png')] bg-cover bg-repeat bg-bottom relative ">
+    <div className="min-h-screen bg-[url('/5172658.jpg')] w-full overflow-hidden ">
       <ServiceHaeder />
+      {/* <FullscreenDialog/> */}
       <div className="mx-10 pb-10">
-        <div className="flex justify-between flex-wrap items-center mb-6 mr-20">
-          <h4 className="font-medium lg:text-2xl text-xl capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4"></h4>
+        <div className="flex justify-between flex-wrap items-center mb-6 mr-20 sm:mr-0">
+          <h4 className="font-medium lg:text-2xl text-xl capitalize text-gray-50 inline-block ltr:pr-4 rtl:pl-4"></h4>
           <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
             <select
               value={selectedSasValue}
               onChange={handleSasValue}
-              className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs"
+              className="select rounded-full select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
             >
               {selectToSAS.map((option, index) => (
                 <option key={index} value={option.name}>
@@ -200,7 +202,7 @@ export default function Service() {
             <select
               value={selectedCountryValue}
               onChange={handleCountryValue}
-              className="select rounded-full select-bordered  bg-transparent ring-0 ring-gray-400 w-full max-w-xs"
+              className="select rounded-full select-bordered  bg-white ring-0 ring-gray-400 w-full max-w-xs"
             >
               {selectToCountry.map((option, index) => (
                 <option key={index} value={option.name}>
@@ -212,7 +214,7 @@ export default function Service() {
         </div>
 
         <div className="flex justify-between flex-wrap items-center mb-6 ml-10 gap-3">
-          <h4 className="font-medium  text-lg capitalize text-slate-900 inline-block ltr:pr-4 rtl:pl-4">
+          <h4 className="font-medium  text-lg capitalize text-gray-50 inline-block ltr:pr-4 rtl:pl-4">
             Query Here:
           </h4>
           <span className="flex-1 text-xl">
@@ -225,7 +227,7 @@ export default function Service() {
           </span>
           <div className="flex flex-col space-y-1 sm:justify-end items-center ">
             <button
-              className="btn  bg-slate-400 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-500"
+              className="btn  bg-slate-50 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-100"
               onClick={() => handelQueryChange("ChatGpt", inputValue)}
               disabled={isQuery}
             >
@@ -234,7 +236,7 @@ export default function Service() {
             </button>
 
             <button
-              className="btn bg-slate-400 px-5 py-0 rounded-full normal-case hover:bg-gray-500"
+              className="btn bg-slate-50 px-5 py-0 rounded-full normal-case hover:bg-gray-100"
               onClick={exportChatData}
             >
               Save Chat
@@ -242,7 +244,7 @@ export default function Service() {
           </div>
         </div>
 
-        {chatHistory.length > 0 && (
+        {/* {chatHistory.length > 0 && (
           <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
             {chatHistory.map((message, index) => (
               <div
@@ -261,7 +263,34 @@ export default function Service() {
               </div>
             ))}
           </div>
-        )}
+        )} */}
+
+{chatHistory.length > 0 && (
+  <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
+    {chatHistory.slice().reverse().map((message, index, array) => (
+      <div
+        key={index}
+        className={`mb-2 ${
+          message.role === "user" ? "text-left" : "text-left"
+        }`}
+      >
+        <span
+          className={`${
+            message.role === "user" ? "bg-blue-200" : "bg-green-200"
+          } text-black px-4 py-2 rounded-lg inline-block`}
+        >
+          {message.role === "user" ? (
+            // Display the question
+            <strong>{message.content}</strong>
+          ) : (
+            // Display the answer
+            <span>{message.content}</span>
+          )}
+        </span>
+      </div>
+    ))}
+  </div>
+)}
 
         <div className="tabs gap-2 mt-5">
           <a className="tab rounded-full  bg-white text-black ">All</a>
@@ -276,18 +305,21 @@ export default function Service() {
             Import Export
           </a>
         </div>
+      
+
         <div className="flex flex-row gap-6 mt-5">
+
           {cardData.map((card, index) => (
             <div
               key={index}
-              className={`card w-96 bg-base-100 shadow-xl ${
+              className={`card w-auto bg-base-100 shadow-xl ${
                 selectedCard === index
-                  ? "ring-8 ring-yellow-300"
-                  : "ring-1 ring-blue-100"
+                  ? " shadow-yellow-400"
+                  : "shadow-blue-100"
               }`}
             >
               <div
-                className="card-body bg-blue-900 flex-col w-full rounded-xl"
+                className="card-body bg-blue-700 flex-col w-full rounded-xl"
                 onClick={() => handleCardClick(index)}
               >
                 <div className="divider w-full right-0 top-0 left-0 bottom-0 m-0 p-0"></div>

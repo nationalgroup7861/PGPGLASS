@@ -11,14 +11,14 @@ const Login3 = () => {
       <div
         className="loginwrapper bg-cover bg-no-repeat bg-center"
         style={{
-          backgroundImage: `url(/assets/images/all-img/page-bg.png)`,
+          backgroundImage: `url(/5172658.jpg)`,
         }}
       >
         <div className="lg-inner-column">
           <div className="left-columns lg:w-1/2 lg:block hidden">
             <div className="logo-box-3">
               <Link href="/" className="">
-                <img src="/logo.png" alt="" width={"300px"}  height={"300px"}/>
+                <img src="/logo-white.svg" alt="" width={"200px"}  height={"200px"}/>
               </Link>
             </div>
           </div>
@@ -29,8 +29,8 @@ const Login3 = () => {
                   <img
                     src={
                       isDark
-                        ? "/logo.png"
-                        : "/logo.png"
+                        ? "/logo-white.svg"
+                        : "/logo.svg"
                     }
                     alt=""
                     className="mx-auto"

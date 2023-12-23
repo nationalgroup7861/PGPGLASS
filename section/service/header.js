@@ -53,32 +53,28 @@ export default function ServiceHaeder()
 
   return (
     <header>
-    <nav
-        className="mx-auto flex max-w-full items-center justify-between p-6 lg:px-8"
-        aria-label="Global"
-    >
-        <div className="flex w-20 ">
+    <nav className="mx-auto flex max-w-full items-center justify-between p-6 lg:px-8"  aria-label="Global" >
+        <div className="flex w-20">
             <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                {/* <img className="h-20 w-auto" src="/logo.png" alt="" /> */}
-                <Image src="/logo.png" alt="PSP GLASS" width={100} height={100} />
+                <span className="sr-only">PGP GLASS</span>
+                <Image src="/logo-white.svg" alt="PGP GLASS" width={50} height={50} />
             </a>
         </div>
-        <div className="flex lg:hidden">
+        <div className="flex lg:hidden text-white">
             <button
                 type="button"
                 className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
                 onClick={() => setMobileMenuOpen(true)}
             >
                 <span className="sr-only">Open main menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" color="white" />
             </button>
         </div>
-        <div className="flex rounded-full ring-2  lg:flex-1 lg:gap-x-12 p-4 bg-gradient-to-r from-blue-800 to-blue-950 ">
-            <div className="flex w-full items-center justify-start lg:w-auto lg:flex-grow">
-                <a
-                    href="#"
-                    className="w-full items-center justify-center rounded px-3 py-2 text-white  hover:text-white  lg:w-auto"
+        <div className="hidden lg:flex lg:flex-1 lg:gap-x-12  border border-gray-100 py-3 md:rounded-3xl w-full max-w-screen-md lg:max-w-screen-lg">
+        {/* <div className="flex rounded-full ring-2  lg:flex-1 lg:gap-x-12 p-4 bg-gradient-to-r from-blue-800 to-blue-950 "> */}
+            <div className="flex w-auto items-center justify-start lg:w-auto lg:flex-grow">
+                <a href="#"
+                    className="w-auto items-center justify-center rounded px-3 py-1 text-white  hover:text-white  lg:w-auto"
                 >
                     <span className="">SUDIP</span>
                     <br></br>
@@ -204,7 +200,7 @@ export default function ServiceHaeder()
                 <a href="#" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
                     
-                    <Image src="/logo.png" alt="PSP GLASS" width={70} height={70} />
+                    <Image src="/logo-white.svg" alt="PGP GLASS" width={70} height={70} />
                 </a>
                 <button
                     type="button"
