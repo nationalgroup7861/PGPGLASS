@@ -165,17 +165,35 @@ export default function Service() {
     });
   }
 
+  // const handelQueryChange = async (name, row) => {
+  //   setIsQuery(true);
+  //   const answer = await GetOpenAi(row);
+  //   setOutputValue(answer);
+  //   setChatHistory((prevChatHistory) => [
+  //     ...prevChatHistory,
+  //     { role: "user", content: inputValue },
+  //     { role: "ai", content: answer },
+  //   ]);
+  //   setIsQuery(false);
+  // };
+
+
   const handelQueryChange = async (name, row) => {
     setIsQuery(true);
     const answer = await GetOpenAi(row);
-    setOutputValue(answer);
+      setOutputValue(answer);
+
+    // Add the new question and answer at the beginning of the array
     setChatHistory((prevChatHistory) => [
-      ...prevChatHistory,
       { role: "user", content: inputValue },
       { role: "ai", content: answer },
+      ...prevChatHistory,
     ]);
+  
+    setInputValue(""); // Clear the input after submitting
     setIsQuery(false);
   };
+  
 
   useEffect(() => {
     const computedValue = cardData[selectedCard].statement
@@ -259,31 +277,34 @@ export default function Service() {
 
         {chatHistory.length > 0 && (
           <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
-            {chatHistory
-              .slice()
-              .reverse()
-              .map((message, index, array) => (
-                <div
-                  key={index}
-                  className={`mb-2 ${
-                    message.role === "user" ? "text-left" : "text-left"
-                  }`}
-                >
-                  <span
-                    className={`${
-                      message.role === "user" ? "bg-blue-200" : "bg-green-200"
-                    } text-black px-4 py-2 rounded-lg inline-block`}
+            {
+              chatHistory
+                .slice()
+                .reverse()
+                .map((message, index, array) => (
+                  <div
+                    key={index}
+                    className={`mb-2 ${
+                      message.role === "user" ? "text-left" : "text-left"
+                    }`}
                   >
-                    {message.role === "user" ? (
-                      // Display the question
-                      <strong>{message.content}</strong>
-                    ) : (
-                      // Display the answer
-                      <span>{message.content}</span>
-                    )}
-                  </span>
-                </div>
-              ))}
+                    <span
+                      className={`${
+                        message.role === "user" ? "bg-blue-200" : "bg-green-200"
+                      } text-black px-4 py-2 rounded-lg inline-block`}
+                    >
+                      {message.role === "user" ? (
+                        // Display the question
+                        <strong>{message.content}</strong>
+                      ) : (
+                        // Display the answer
+                        <span>{message.content}</span>
+                      )}
+                    </span>
+                  </div>
+                ))
+                .reverse() // Reverse the order here
+            }
           </div>
         )}
 
