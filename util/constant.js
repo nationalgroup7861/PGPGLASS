@@ -9,12 +9,10 @@ export const CLIENT_API = {
 };
 
 export const USER_API = {
-  login: "/client/login",
+  login: "/user/login",
   create: "/user/create",
   list: "/user",
   delete:"/user/delete/",
 };
-
-
 
 

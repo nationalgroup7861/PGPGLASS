@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Textinput from "@/components/ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { handleLogin } from "./store";
 import { toast } from "react-toastify";
+import { ApiContext } from "@/context/ApiContext";
+import { USER_API } from "@/util/constant";
 const schema = yup
   .object({
     email: yup.string().email("Invalid email").required("Email is Required"),
@@ -17,6 +19,8 @@ const schema = yup
   .required();
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const {getApiData,postApiData}=useContext(ApiContext);
+
   const { users } = useSelector((state) => state.auth);
   const {
     register,
@@ -28,28 +32,47 @@ const LoginForm = () => {
     mode: "all",
   });
   const router = useRouter();
-  const onSubmit = (data) => {
-    // const user = users.find(
-    //   (user) => user.email === data.email && user.password === data.password
-    // );
-    if (data.email="admin@pgp.com" && data.password=="admin@123") {
-      dispatch(handleLogin(true));
-      setTimeout(() => {
-        router.push("/admin/crm");
-      }, 1500);
-    } else {
+  const onSubmit = async (data) => {
+
+
+    try {
+      const response=await postApiData(USER_API.login,data);
+      const result=response.data;
+      if(result.status===200)
+      {
+        // dispatch(handleLogin(result.result));
+        dispatch(handleLogin({data:result.result,type:"admin"}));
+           setTimeout(() => {
+            router.push("/admin/crm");
+          }, 100);
+      }
+      else{
+        toast.error("Account is Disabled,Please Contact Admin", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+
+    } catch (error) {
       toast.error("Invalid credentials", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
+            position: "top-right",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        
+     };
 
   const [checked, setChecked] = useState(false);
 

@@ -1,20 +1,18 @@
 "use client";
 import { exportToExcel } from "@/extra/ChatReport";
-import { ServiceHaeder } from "@/section/service";
+import { ServiceHaedernew } from "@/section/service";
+import { PhoneIcon, PlayCircleIcon } from "@heroicons/react/20/solid";
 import {
-    PhoneIcon,
-    PlayCircleIcon
-} from "@heroicons/react/20/solid";
-import {
-    ChartPieIcon,
-    CursorArrowRaysIcon,
-    FingerPrintIcon,
-    UserIcon
+  ChartPieIcon,
+  CursorArrowRaysIcon,
+  FingerPrintIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { BardAPI } from "bardapi";
+import { useRouter } from "next/navigation";
 import OpenAI from "openai";
 import { useEffect, useState } from "react";
-import FullscreenDialog from "./FullscreenDialog";
+import { useSelector } from "react-redux";
 
 const selectToSAS = [
   { id: 1, name: "Beer Bottle" },
@@ -101,6 +99,22 @@ export default function Service() {
   const [outputValue, setOutputValue] = useState("");
   const [chatHistory, setChatHistory] = useState([]); // To store chat history
   const [isQuery, setIsQuery] = useState(false);
+  const router = useRouter();
+  const { isAuth } = useSelector((state) => state.auth);
+  const [chatgptKey, setChatGptKey] = useState("");
+
+  useEffect(() => {
+    let user_type;
+    let user_data;
+    if (typeof window !== "undefined") {
+      user_type = window?.localStorage.getItem("user_type");
+      user_data = JSON.parse(window?.localStorage.getItem("pgp_user"));
+    }
+    setChatGptKey(user_data?.chat_gpt_key);
+    if (!isAuth || !user_type) {
+      router.push("/");
+    }
+  }, [isAuth]);
 
   const handleSasValue = (event) => {
     setSelectedSasValue(event.target.value);
@@ -125,7 +139,7 @@ export default function Service() {
 
   async function GetOpenAi(query) {
     const openai = new OpenAI({
-      apiKey: "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",
+      apiKey: chatgptKey,
       dangerouslyAllowBrowser: true,
     });
 
@@ -152,11 +166,9 @@ export default function Service() {
   }
 
   const handelQueryChange = async (name, row) => {
-    // console.log(row);
     setIsQuery(true);
     const answer = await GetOpenAi(row);
     setOutputValue(answer);
-
     setChatHistory((prevChatHistory) => [
       ...prevChatHistory,
       { role: "user", content: inputValue },
@@ -174,15 +186,16 @@ export default function Service() {
   }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
   const exportChatData = async () => {
-    exportToExcel(chatHistory)
+    exportToExcel(chatHistory);
     // exportToWord(chatHistory)
-
   };
 
   return (
-    // <div className="lg:h-screen lg:w-screen bg-cover bg-repeat bg-bottom bg-[url('/cbimage.png')]">
-    <div className="min-h-screen bg-[url('/5172658.jpg')] w-full overflow-hidden ">
-      <ServiceHaeder />
+    // <div className="lg:h-screen lg:w-screen bg-cover bg-repeat bg-gradient-to-r from-stone-500 to-stone-700">
+    // <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom bg-[url('/pgp_bg.jpg')]">
+    // <div className="min-h-screen bg-[url('/pgp_bg.jpg')] w-full overflow-hidden ">
+    <div className="min-h-screen bg-cover bg-no-repeat  bg-[url('/pgp_bg.jpg')]">
+      <ServiceHaedernew />
       {/* <FullscreenDialog/> */}
       <div className="mx-10 pb-10">
         <div className="flex justify-between flex-wrap items-center mb-6 mr-20 sm:mr-0">
@@ -191,7 +204,7 @@ export default function Service() {
             <select
               value={selectedSasValue}
               onChange={handleSasValue}
-              className="select rounded-full select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
+              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
             >
               {selectToSAS.map((option, index) => (
                 <option key={index} value={option.name}>
@@ -202,7 +215,7 @@ export default function Service() {
             <select
               value={selectedCountryValue}
               onChange={handleCountryValue}
-              className="select rounded-full select-bordered  bg-white ring-0 ring-gray-400 w-full max-w-xs"
+              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-400 w-full max-w-xs"
             >
               {selectToCountry.map((option, index) => (
                 <option key={index} value={option.name}>
@@ -244,91 +257,76 @@ export default function Service() {
           </div>
         </div>
 
-        {/* {chatHistory.length > 0 && (
+        {chatHistory.length > 0 && (
           <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
-            {chatHistory.map((message, index) => (
-              <div
-                key={index}
-                className={`mb-2 ${
-                  message.role === "user" ? "text-left" : "text-left"
-                }`}
-              >
-                <span
-                  className={`${
-                    message.role === "user" ? "bg-blue-200" : "bg-green-200"
-                  } text-black px-4 py-2 rounded-lg inline-block`}
+            {chatHistory
+              .slice()
+              .reverse()
+              .map((message, index, array) => (
+                <div
+                  key={index}
+                  className={`mb-2 ${
+                    message.role === "user" ? "text-left" : "text-left"
+                  }`}
                 >
-                  {message.content}
-                </span>
-              </div>
-            ))}
+                  <span
+                    className={`${
+                      message.role === "user" ? "bg-blue-200" : "bg-green-200"
+                    } text-black px-4 py-2 rounded-lg inline-block`}
+                  >
+                    {message.role === "user" ? (
+                      // Display the question
+                      <strong>{message.content}</strong>
+                    ) : (
+                      // Display the answer
+                      <span>{message.content}</span>
+                    )}
+                  </span>
+                </div>
+              ))}
           </div>
-        )} */}
-
-{chatHistory.length > 0 && (
-  <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
-    {chatHistory.slice().reverse().map((message, index, array) => (
-      <div
-        key={index}
-        className={`mb-2 ${
-          message.role === "user" ? "text-left" : "text-left"
-        }`}
-      >
-        <span
-          className={`${
-            message.role === "user" ? "bg-blue-200" : "bg-green-200"
-          } text-black px-4 py-2 rounded-lg inline-block`}
-        >
-          {message.role === "user" ? (
-            // Display the question
-            <strong>{message.content}</strong>
-          ) : (
-            // Display the answer
-            <span>{message.content}</span>
-          )}
-        </span>
-      </div>
-    ))}
-  </div>
-)}
+        )}
 
         <div className="tabs gap-2 mt-5">
-          <a className="tab rounded-full  bg-white text-black ">All</a>
-          <a className="tab tab-active rounded-full  text-black bg-white">
+          <a className="tab rounded-lg  bg-white text-black-500 px-10">All</a>
+          <a className="tab tab-active rounded-lg  text-white bg-[#ff6600]  px-10">
             Market Research
           </a>
-          <a className="tab rounded-full bg-white  text-black">
+          <a className="tab rounded-lg bg-white  text-black-500  px-10">
             Competitor Information
           </a>
-          <a className="tab rounded-full  bg-white  text-black">New Trend </a>
-          <a className="tab rounded-full  bg-white  text-black">
+          <a className="tab rounded-lg  bg-white  text-black-500  px-10">
+            New Trend{" "}
+          </a>
+          <a className="tab rounded-lg  bg-white  text-black-500  px-10">
             Import Export
           </a>
         </div>
-      
 
         <div className="flex flex-row gap-6 mt-5">
-
           {cardData.map((card, index) => (
             <div
               key={index}
               className={`card w-auto bg-base-100 shadow-xl ${
                 selectedCard === index
-                  ? " shadow-yellow-400"
-                  : "shadow-blue-100"
+                  ? " border-[#ff6600] border-4"
+                  : "border-gray-400  border-4"
               }`}
             >
               <div
-                className="card-body bg-blue-700 flex-col w-full rounded-xl"
+                className="card-body bg-green-50 flex-col w-full rounded-xl"
                 onClick={() => handleCardClick(index)}
               >
-                <div className="divider w-full right-0 top-0 left-0 bottom-0 m-0 p-0"></div>
-                <h2 className="card-title"></h2>
-                <p className="text-white">{card.statement}</p>
+                {/* <div className="divider w-full right-0 top-0 left-0 bottom-0 m-0 p-0"></div> */}
+                {/* <h2 className="card-title"></h2> */}
+                <p className="text-black">{card.statement}</p>
                 <div className="card-actions justify-start">
-                  <div className="flex text-center">
-                    <card.icon className="h-5 w-5 mt-0" aria-hidden="true" />
-                    <span className="text-base">PGP Glass</span>
+                  <div className="flex text-center gap-2">
+                    <card.icon
+                      className="h-5 w-5 mt-0 text-[#ff6600] "
+                      aria-hidden="true"
+                    />
+                    <span className="text-base">PGP GLASS</span>
                   </div>
                 </div>
               </div>

@@ -35,6 +35,7 @@ const initialIsAuth = () => {
   return false;
 };
 
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -80,10 +81,21 @@ export const authSlice = createSlice({
     },
 
     handleLogin: (state, action) => {
-      state.isAuth = action.payload;
-      // save isAuth in local storage
+      state.isAuth = true;
+      state.users = action.payload.data;
+      const user_type=action.payload.type;
       if (typeof window !== "undefined") {
         window?.localStorage.setItem("isAuth", JSON.stringify(state.isAuth));
+        if(user_type=="user")
+        {
+          window?.localStorage.setItem("pgp_user", JSON.stringify(state.users));
+          window?.localStorage.setItem("user_type",true);
+        }
+        if(user_type=="admin")
+        {
+          window?.localStorage.setItem("pgp_admin", JSON.stringify(state.users));
+          window?.localStorage.setItem("admin_type",true);
+        }
       }
       toast.success("User logged in successfully", {
         position: "top-right",
@@ -98,11 +110,21 @@ export const authSlice = createSlice({
     },
     handleLogout: (state, action) => {
       state.isAuth = action.payload;
-      // remove isAuth from local storage
       if (typeof window !== "undefined") {
         window?.localStorage.removeItem("isAuth");
+        const user_type=action.payload.type;
+        if(user_type=="user")
+        {
+          window?.localStorage.removeItem("pgp_user");
+          window?.localStorage.removeItem("user_type");
+        }
+        if(user_type=="admin")
+        {
+          window?.localStorage.removeItem("pgp_admin");
+          window?.localStorage.removeItem("admin_type");
+        }
       }
-      toast.success("User logged out successfully", {
+      toast.success("PGP User logged out successfully", {
         position: "top-right",
       });
     },

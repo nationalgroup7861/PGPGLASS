@@ -1,6 +1,6 @@
 "use client";
-import { apiDeletData, apiGetData, apiPdfGetData, apiPdfPostData, apiPostData, apiPutData } from "@/api";
-import { INTERNET_NETWORK_ERROR, TIMEOUT } from "@/utils/constant";
+import { apiDeletData, apiGetData, apiPdfGetData, apiPdfPostData, apiPostData, apiPutData } from "@/app/api";
+import { INTERNET_NETWORK_ERROR, TIMEOUT } from "@/util/constant";
 import PropTypes from "prop-types";
 import { createContext } from "react";
 import { ToastContainer, toast } from "react-toastify";

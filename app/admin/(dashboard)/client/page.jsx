@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 "use client";
-
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { advancedTable } from "@/constant/table-data";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
@@ -16,6 +15,7 @@ import {
   usePagination,
 } from "react-table";
 import GlobalFilter from "@/components/partials/table/GlobalFilter";
+import { ClientContext } from "@/context/ClientContext";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -41,6 +41,8 @@ const IndeterminateCheckbox = React.forwardRef(
 
 const ClientPage = () => {
   const router = useRouter();
+  const { clientList, setClientList } = useContext(ClientContext);
+
   const actions = [
     {
       name: "send",
@@ -80,28 +82,21 @@ const ClientPage = () => {
       },
     },
     {
-      Header: "Order",
-      accessor: "order",
+      Header: "customer",
+      accessor: "name",
       Cell: (row) => {
-        return <span>#{row?.cell?.value}</span>;
+        return <span>{row?.cell?.value}</span>;
       },
     },
     {
-      Header: "customer",
-      accessor: "customer",
+      Header: "Email",
+      accessor: "email",
       Cell: (row) => {
         return (
           <div>
             <span className="inline-flex items-center">
-              <span className="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none bg-slate-600">
-                <img
-                  src={row?.cell?.value.image}
-                  alt=""
-                  className="object-cover w-full h-full rounded-full"
-                />
-              </span>
-              <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
-                {row?.cell?.value.name}
+             <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
+                {row?.cell?.value}
               </span>
             </span>
           </div>
@@ -110,25 +105,26 @@ const ClientPage = () => {
     },
     {
       Header: "date",
-      accessor: "date",
+      accessor: "issue_date",
+      Cell: (row) => {
+        return <span>{row?.cell?.value}</span>;
+      },
+    },
+    {
+      Header: "Phone",
+      accessor: "phone",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },
     },
     {
       Header: "Chat Gpt Key",
-      accessor: "quantity",
+      accessor: "chat_gpt_key",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },
     },
-    {
-      Header: "Amount",
-      accessor: "amount",
-      Cell: (row) => {
-        return <span>{row?.cell?.value}</span>;
-      },
-    },
+   
     {
       Header: "status",
       accessor: "status",
@@ -137,12 +133,12 @@ const ClientPage = () => {
           <span className="block w-full">
             <span
               className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === "paid"
+                row?.cell?.value === "1"
                   ? "text-success-500 bg-success-500"
                   : ""
               } 
             ${
-              row?.cell?.value === "due"
+              row?.cell?.value === "0"
                 ? "text-warning-500 bg-warning-500"
                 : ""
             }
@@ -154,7 +150,7 @@ const ClientPage = () => {
             
              `}
             >
-              {row?.cell?.value}
+              {row?.cell?.value=="1" ? "Active":"Expired"}
             </span>
           </span>
         );
@@ -204,7 +200,7 @@ const ClientPage = () => {
   ];
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => advancedTable, []);
+  const data = useMemo(() => clientList, [clientList]);
 
   const tableInstance = useTable(
     {
@@ -261,7 +257,7 @@ const ClientPage = () => {
     <>
       <Card noborder>
         <div className="md:flex pb-6 items-center">
-          <h6 className="flex-1 md:mb-0 mb-3">Clinet</h6>
+          <h6 className="flex-1 md:mb-0 mb-3">Customer</h6>
           <div className="md:flex md:space-x-3 items-center flex-none rtl:space-x-reverse">
             <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
             <Button
@@ -278,11 +274,11 @@ const ClientPage = () => {
             />
             <Button
               icon="heroicons-outline:plus-sm"
-              text="Add Record"
-              className=" btn-dark font-normal btn-sm "
+              text="Add Customer"
+              className=" btn-primary font-normal btn-sm "
               iconClass="text-lg"
               onClick={() => {
-                router.push("/client-add");
+                router.push("/admin/client-add");
               }}
             />
           </div>
@@ -291,7 +287,7 @@ const ClientPage = () => {
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden ">
               <table
-                className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
+                className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700 mb-64"
                 {...getTableProps}
               >
                 <thead className=" border-t border-slate-100 dark:border-slate-800">

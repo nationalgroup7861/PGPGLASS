@@ -2,23 +2,21 @@
 
 import LoginForm from "@/components/partials/auth//login-form";
 import useDarkMode from "@/hooks/useDarkMode";
+import Image from "next/image";
 import Link from "next/link";
+// bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-indigo-200 via-slate-600 to-indigo-200
 
 const Login3 = () => {
   const [isDark] = useDarkMode();
   return (
     <>
       <div
-        className="loginwrapper bg-cover bg-no-repeat bg-center"
-        style={{
-          backgroundImage: `url(/5172658.jpg)`,
-        }}
-      >
+        className="loginwrapper bg-cover bg-no-repeat bg-center bg-gradient-to-r from-[#6dd4f2] to-[#99ddf0]">
         <div className="lg-inner-column">
           <div className="left-columns lg:w-1/2 lg:block hidden">
             <div className="logo-box-3">
               <Link href="/" className="">
-                <img src="/logo-white.svg" alt="" width={"200px"}  height={"200px"}/>
+                <Image src="/pgplogo.svg" alt="PGPGLASS" width={200}  height={200}/>
               </Link>
             </div>
           </div>
@@ -26,14 +24,15 @@ const Login3 = () => {
             <div className="auth-box-3">
               <div className="mobile-logo text-center mb-6 lg:hidden block">
                 <Link href="/">
-                  <img
+                  <Image
                     src={
                       isDark
                         ? "/logo-white.svg"
-                        : "/logo.svg"
+                        : "/pgplogo.svg"
                     }
-                    alt=""
+                    alt="PGPGLASS"
                     className="mx-auto"
+                    width={50}  height={50}
                   />
                 </Link>
               </div>
@@ -57,7 +56,7 @@ const Login3 = () => {
             </div>
           </div>
           <div className="auth-footer3 text-white py-5 px-5 text-xl w-full">
-            Unlock your Project performance
+            Unlock your  performance
           </div>
         </div>
       </div>

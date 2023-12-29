@@ -57,7 +57,7 @@ export default function ServiceHaeder()
         <div className="flex w-20">
             <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">PGP GLASS</span>
-                <Image src="/logo-white.svg" alt="PGP GLASS" width={50} height={50} />
+                <Image src="/pgplogo.svg" alt="PGP GLASS" width={70} height={50} />
             </a>
         </div>
         <div className="flex lg:hidden text-white">
@@ -200,7 +200,7 @@ export default function ServiceHaeder()
                 <a href="#" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
                     
-                    <Image src="/logo-white.svg" alt="PGP GLASS" width={70} height={70} />
+                    <Image src="/pgplogo.svg" alt="PGP GLASS" width={70} height={70} />
                 </a>
                 <button
                     type="button"

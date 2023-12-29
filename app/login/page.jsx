@@ -1,18 +1,44 @@
 import Image from "next/image";
-
+// bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-sky-400 to-blue-800
+// bg-gradient-to-r from-fuchsia-500 to-cyan-500
 export default function Login() {
   return (
-    <main className="flex w-desktop min-h-screen flex-col items-center justify-between p-9">
+    <main className="flex w-desktop min-h-screen flex-col items-center justify-between p-9 bg-gradient-to-r from-cyan-500 to-blue-500  ">
       <div className="flex min-h-full flex-col justify-center px-2 py-2 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm pb-1">
           <Image
             className="mx-auto h-28 w-auto"
-            src="/logo-white.svg"
+            src="/pgplogo.svg"
             alt="PGP"
             width="200"
             height="100"
           />
         </div>
+        <Image
+        src="/aich.svg"
+        alt=""
+        className="absolute -z-1 hidden lg:block lg:left-[10%] h-[45vh] 3xl:left-[5%] 3xl:h-[70vh]"
+        width={600}
+        height={200}
+        style={{
+          bottom: "30%",
+          transform: "translateX(0px) translateY(60%) translateZ(0px)",
+          opacity: 0.3,
+        }}
+      />
+
+      <Image
+        src="/5162744.svg"
+        alt=""
+        className="absolute -z-1 hidden lg:block lg:right-[10%] h-[40vh] 3xl:right-[5%] 3xl:h-[50vh]"
+        width={600}
+        height={200}
+        style={{
+          bottom: "70%",
+          transform: "translateX(0px) translateY(60%) translateZ(0px)",
+          opacity: 0.2,
+        }}
+      />
 
         <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
           <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">
@@ -34,8 +60,8 @@ export default function Login() {
                       className="h-6 w-6"
                       fill="none"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
@@ -66,8 +92,8 @@ export default function Login() {
                         className="h-6 w-6"
                         fill="none"
                         strokeLinecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
@@ -108,8 +134,8 @@ export default function Login() {
                       className="h-6 w-6"
                       fill="none"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
@@ -131,8 +157,8 @@ export default function Login() {
                   className="h-6 w-6"
                   fill="none"
                   strokeLinecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >

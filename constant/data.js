@@ -59,17 +59,17 @@ export const menuItems = [
   // },
 
   {
-    title: "Client",
+    title: "Customer",
     icon: "heroicons-outline:user",
     link: "#",
     isHide: true,
     child: [
       {
-        childtitle: "Client",
+        childtitle: "Customer",
         childlink: "client",
       },
       {
-        childtitle: "Add Client",
+        childtitle: "Add Customer",
         childlink: "client-add",
       },
     ],
