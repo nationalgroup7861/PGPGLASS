@@ -247,10 +247,6 @@ export default function Service() {
   };
 
   
-
-
-
-
   const exportChatData = async () => {
     exportToExcel(chatHistory, userInfo);
   };

@@ -2,24 +2,9 @@
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const profile = () => {
 
-
-const [profileInfo,setProfileInfo]=useState({});
-  useEffect(() => {
-    let admin_type;
-    let admin_data;
-    if (typeof window !== "undefined") {
-      admin_type = window?.localStorage.getItem("admin_type");
-      admin_data = JSON.parse(window?.localStorage.getItem("pgp_admin"));
-      setProfileInfo(admin_data)
-    }
-    if (!isAuth || !admin_type) {
-      router.push("/admin");
-    }
-  }, [isAuth]);
 
 
   return (
