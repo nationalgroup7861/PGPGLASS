@@ -1,13 +1,7 @@
 "use client";
 import { exportToExcel } from "@/extra/ChatReport";
 import { ServiceHaedernew } from "@/section/service";
-import { PhoneIcon, PlayCircleIcon } from "@heroicons/react/20/solid";
-import {
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
 import { BardAPI } from "bardapi";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
@@ -39,32 +33,6 @@ const selectToCountry = [
 ];
 
 // chatgpt 4, Bard, internalGPT
-const chat_menu = [
-  {
-    name: "Chatgpt 4",
-    description: "Explore the power of ChatGPT-4.",
-    href: "#",
-    icon: ChartPieIcon,
-  },
-  {
-    name: "Bard",
-    description: "Unleash creativity with Bard, the next-level AI storyteller",
-    href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "InternalGPT",
-    description:
-      "Unlock innovation with InternalGPT, your AI companion for internal tasks",
-    href: "#",
-    icon: FingerPrintIcon,
-  },
-];
-
-const callsToAction = [
-  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
-  { name: "Contact sales", href: "#", icon: PhoneIcon },
-];
 
 const cardData = [
   {
@@ -103,12 +71,18 @@ export default function Service() {
   const { isAuth } = useSelector((state) => state.auth);
   const [chatgptKey, setChatGptKey] = useState("");
 
+  const [chatSessionList, setChatSessionList] = useState([]);
+  const [currentChatSession, setCurrentChatSession] = useState('');
+
+  const [userInfo, setUserInfo] = useState({});
+
   useEffect(() => {
     let user_type;
     let user_data;
     if (typeof window !== "undefined") {
       user_type = window?.localStorage.getItem("user_type");
       user_data = JSON.parse(window?.localStorage.getItem("pgp_user"));
+      setUserInfo(user_data);
     }
     setChatGptKey(user_data?.chat_gpt_key);
     if (!isAuth || !user_type) {
@@ -119,6 +93,12 @@ export default function Service() {
   const handleSasValue = (event) => {
     setSelectedSasValue(event.target.value);
   };
+
+  const handleChatSessionValue = (event) => {
+    setCurrentChatSession(event.target.value);
+  };
+
+
 
   const handleCountryValue = (event) => {
     setSelectedCOuntryValue(event.target.value);
@@ -165,35 +145,70 @@ export default function Service() {
     });
   }
 
-  // const handelQueryChange = async (name, row) => {
-  //   setIsQuery(true);
-  //   const answer = await GetOpenAi(row);
-  //   setOutputValue(answer);
-  //   setChatHistory((prevChatHistory) => [
-  //     ...prevChatHistory,
-  //     { role: "user", content: inputValue },
-  //     { role: "ai", content: answer },
-  //   ]);
-  //   setIsQuery(false);
-  // };
+  useEffect(() => {
+    const currentsaveChatSeesion =JSON.parse(localStorage.getItem("currentChatSession")) || {};
+    const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
+    const isEmptyObject = Object.keys(currentsaveChatSeesion).length === 0;
 
+    if (!isEmptyObject) {
+      const savedChats =JSON.parse(localStorage.getItem(currentsaveChatSeesion.key)) || [];
+      // const reversedChats = savedChats.slice().reverse();
+      setChatHistory(savedChats);
+    } else {
+      const newSessionKey = generateChatKey();
+      const newSession = {
+        title: "New Chat",
+        key: newSessionKey,
+      };
+
+      const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
+      chatSessionList.unshift(newSession);
+      localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
+      localStorage.setItem("currentChatSession", JSON.stringify(newSession));
+    }
+
+    chatSessionList && setChatSessionList(chatSessionList);
+    currentsaveChatSeesion && setCurrentChatSession(currentsaveChatSeesion.key)
+
+  }, []);
+
+  const generateChatKey = () => {
+    const timestamp = new Date().getTime();
+    const randomNumber = Math.floor(Math.random() * 100000);
+    return `chat_${timestamp}_${randomNumber}`;
+  };
+
+  const saveChatLocally = (answer) => {
+    const savedChats =JSON.parse(localStorage.getItem(currentChatSession)) || [];
+    const newChat = {
+      role: "user",
+      content: inputValue,
+    };
+    const newAiResponse = {
+      role: "ai",
+      content: answer,
+    };
+    savedChats.unshift(newChat, newAiResponse); // Use unshift to add the new chat at the beginning
+    localStorage.setItem(
+      currentChatSession,
+      JSON.stringify(savedChats)
+    );
+  };
 
   const handelQueryChange = async (name, row) => {
     setIsQuery(true);
     const answer = await GetOpenAi(row);
-      setOutputValue(answer);
-
-    // Add the new question and answer at the beginning of the array
+    setOutputValue(answer);
+    saveChatLocally(answer);
     setChatHistory((prevChatHistory) => [
       { role: "user", content: inputValue },
       { role: "ai", content: answer },
       ...prevChatHistory,
     ]);
-  
+
     setInputValue(""); // Clear the input after submitting
     setIsQuery(false);
   };
-  
 
   useEffect(() => {
     const computedValue = cardData[selectedCard].statement
@@ -203,9 +218,41 @@ export default function Service() {
     setInputValue(computedValue);
   }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
+
+  useEffect(() => {
+    if(currentChatSession)
+    {
+        const savedChats =JSON.parse(localStorage.getItem(currentChatSession)) || [];
+        const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
+        const matchingChatSession = chatSessionList.find(session => session.key == currentChatSession);
+        localStorage.setItem("currentChatSession", JSON.stringify(matchingChatSession));
+        setChatHistory(savedChats);
+        setChatSessionList(chatSessionList)
+
+    }
+  
+  }, [currentChatSession]);
+
+
+  const handleNewSessionClick = () => {
+    const newSessionKey = generateChatKey();
+    const newSession = {
+      title: "New Chat Session",
+      key: newSessionKey,
+    };
+    const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
+    chatSessionList.unshift(newSession);
+    localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
+    setCurrentChatSession(newSessionKey);
+  };
+
+  
+
+
+
+
   const exportChatData = async () => {
-    exportToExcel(chatHistory);
-    // exportToWord(chatHistory)
+    exportToExcel(chatHistory, userInfo);
   };
 
   return (
@@ -219,6 +266,18 @@ export default function Service() {
         <div className="flex justify-between flex-wrap items-center mb-6 mr-20 sm:mr-0">
           <h4 className="font-medium lg:text-2xl text-xl capitalize text-gray-50 inline-block ltr:pr-4 rtl:pl-4"></h4>
           <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
+            <select
+              value={currentChatSession}
+              onChange={handleChatSessionValue}
+              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
+            >
+              {chatSessionList?.map((option, index) => (
+                <option key={index} value={option.key}>
+                  {option.key}
+                </option>
+              ))}
+            </select>
+
             <select
               value={selectedSasValue}
               onChange={handleSasValue}
@@ -271,6 +330,13 @@ export default function Service() {
               onClick={exportChatData}
             >
               Save Chat
+            </button>
+
+            <button
+              className="btn bg-slate-50 px-5 py-0 rounded-full normal-case hover:bg-gray-100"
+              onClick={() => handleNewSessionClick()}
+            >
+              New Chat
             </button>
           </div>
         </div>

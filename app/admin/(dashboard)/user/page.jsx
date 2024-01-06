@@ -16,6 +16,10 @@ import {
 } from "react-table";
 import GlobalFilter from "@/components/partials/table/GlobalFilter";
 import { ClientContext } from "@/context/ClientContext";
+import UserModal from "@/app/modal/UserModal";
+import ConfirmationModal from "@/app/modal/ConfirmationModal";
+import { CLIENT_API } from "@/util/constant";
+import { ApiContext } from "@/context/ApiContext";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -41,35 +45,32 @@ const IndeterminateCheckbox = React.forwardRef(
 
 const ClientPage = () => {
   const router = useRouter();
-  const { clientList, setClientList } = useContext(ClientContext);
+  const { clientList, setClientList,handlePageRefresh } = useContext(ClientContext);
+  const [userModal, setUserModal] = useState({ status: false, data: "" });
+  const [userDetail, setUserDetail] = useState({});
+  const { getApiData, putApiData, postApiData,deleteApiData } = useContext(ApiContext);
 
   const actions = [
-    {
-      name: "send",
-      icon: "ph:paper-plane-right",
-      doit: () => {
-        router.push("/clinet-add");
-      },
-    },
-    {
-      name: "view",
-      icon: "heroicons-outline:eye",
-      doit: () => {
-        router.push("/clinet-preview");
-      },
-    },
+    // {
+    //   name: "view",
+    //   icon: "heroicons-outline:eye",
+    //   doit: () => {
+    //     router.push("/clinet-preview");
+    //   },
+    // },
     {
       name: "edit",
       icon: "heroicons:pencil-square",
-      doit: (id) => {
-        router.push("/clinet-edit");
+      doit: (row) => {
+        // router.push("/clinet-edit/id");
+        setUserModal({ status: true, data: row });
       },
     },
     {
       name: "delete",
       icon: "heroicons-outline:trash",
-      doit: (id) => {
-        return null;
+      doit: (row) => {
+        setOpenDelete(true), setUserDetail(row);
       },
     },
   ];
@@ -95,7 +96,7 @@ const ClientPage = () => {
         return (
           <div>
             <span className="inline-flex items-center">
-             <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
+              <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
                 {row?.cell?.value}
               </span>
             </span>
@@ -124,7 +125,7 @@ const ClientPage = () => {
         return <span>{row?.cell?.value}</span>;
       },
     },
-   
+
     {
       Header: "status",
       accessor: "status",
@@ -137,11 +138,7 @@ const ClientPage = () => {
                   ? "text-success-500 bg-success-500"
                   : ""
               } 
-            ${
-              row?.cell?.value === "0"
-                ? "text-warning-500 bg-warning-500"
-                : ""
-            }
+            ${row?.cell?.value === "0" ? "text-warning-500 bg-warning-500" : ""}
             ${
               row?.cell?.value === "cancled"
                 ? "text-danger-500 bg-danger-500"
@@ -150,7 +147,7 @@ const ClientPage = () => {
             
              `}
             >
-              {row?.cell?.value=="1" ? "Active":"Expired"}
+              {row?.cell?.value == "1" ? "Active" : "Expired"}
             </span>
           </span>
         );
@@ -174,9 +171,8 @@ const ClientPage = () => {
                 {actions.map((item, i) => (
                   <div
                     key={i}
-                    onClick={() => item.doit()}
+                    onClick={() => item.doit(row.cell.row.original)}
                     className={`
-                
                   ${
                     item.name === "delete"
                       ? "bg-danger-500 text-danger-500 bg-opacity-30   hover:bg-opacity-100 hover:text-white"
@@ -252,12 +248,48 @@ const ClientPage = () => {
   } = tableInstance;
 
   const { globalFilter, pageIndex, pageSize } = state;
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handelItemDelete = async (row) => {
+    try {
+      const response = await deleteApiData(CLIENT_API.delete + row.id);
+      handlePageRefresh(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
+      {userModal.status && (
+        <UserModal
+          open={userModal.status}
+          closeDialog={() => {
+            setUserModal({ status: false, data: "" });
+            handlePageRefresh(true);
+          }}
+          referenceData={userModal.data}
+        />
+      )}
+
+      {openDelete && (
+        <ConfirmationModal
+          open={openDelete}
+          closeDialog={() => {
+            setOpenDelete(false);
+          }}
+          title="Delete User"
+          message="Are You Sure Want to Delete User?"
+          confirmCallback={() => {
+            setOpenDelete(false);
+            handelItemDelete(userDetail);
+          }}
+        />
+      )}
+
       <Card noborder>
         <div className="md:flex pb-6 items-center">
-          <h6 className="flex-1 md:mb-0 mb-3">Customer</h6>
+          <h6 className="flex-1 md:mb-0 mb-3">User</h6>
           <div className="md:flex md:space-x-3 items-center flex-none rtl:space-x-reverse">
             <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
             <Button
@@ -274,11 +306,11 @@ const ClientPage = () => {
             />
             <Button
               icon="heroicons-outline:plus-sm"
-              text="Add Customer"
+              text="Add User"
               className=" btn-primary font-normal btn-sm "
               iconClass="text-lg"
               onClick={() => {
-                router.push("/admin/client-add");
+                router.push("/admin/adduser");
               }}
             />
           </div>

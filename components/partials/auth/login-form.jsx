@@ -43,7 +43,7 @@ const LoginForm = () => {
         // dispatch(handleLogin(result.result));
         dispatch(handleLogin({data:result.result,type:"admin"}));
            setTimeout(() => {
-            router.push("/admin/crm");
+            router.push("/admin/pgp");
           }, 100);
       }
       else{

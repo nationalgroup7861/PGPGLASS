@@ -6,6 +6,8 @@ export const CLIENT_API = {
   create: "/client/create",
   list: "/client",
   delete:"/client/delete/",
+  update:"/client/update",
+
 };
 
 export const USER_API = {
@@ -13,6 +15,8 @@ export const USER_API = {
   create: "/user/create",
   list: "/user",
   delete:"/user/delete/",
+  update:"/user/update",
+
 };
 
 

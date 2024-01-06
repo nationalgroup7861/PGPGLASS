@@ -119,8 +119,8 @@ const Header = ({ className = "custom-class" }) => {
             <Language />
             <SwitchDark />
 
-            {width >= breakpoints.md && <Message />}
-            {width >= breakpoints.md && <Notification />}
+            {/* {width >= breakpoints.md && <Message />}
+            {width >= breakpoints.md && <Notification />} */}
             {width >= breakpoints.md && <Profile />}
             {width <= breakpoints.md && (
               <div

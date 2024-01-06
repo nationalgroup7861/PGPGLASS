@@ -1,14 +1,14 @@
 import React from 'react';
 import * as XLSX from 'xlsx';
 
-export function exportToExcel(chatreport) {
+export function exportToExcel(chatreport,userInfo) {
   // Reverse the data so that the latest chat shows first
   const reversedChatReport = [...chatreport].reverse();
 
   // Prepare the data as an array of arrays
   const data = [["Role", "Content"]]; // First row is for headers
   reversedChatReport.forEach((chat) => {
-    const row = [chat.role, chat.content];
+    const row = [userInfo.name, chat.content];
     data.push(row);
   });
   const ws = XLSX.utils.aoa_to_sheet(data);

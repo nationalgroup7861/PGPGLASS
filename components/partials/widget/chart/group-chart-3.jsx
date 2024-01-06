@@ -2,8 +2,8 @@ import Icon from "@/components/ui/Icon";
 
 const statistics = [
   {
-    title: "Sales",
-    count: "354",
+    title: "USER",
+    count: "5",
     bg: "bg-warning-500",
     text: "text-primary-500",
     percent: "25.67% ",
@@ -12,9 +12,8 @@ const statistics = [
     percentClass: "text-primary-500",
   },
   {
-    title: "Revenue ",
-    count: "$86,954",
-
+    title: "CONVERSATION RATE ",
+    count: "2200",
     bg: "bg-info-500",
     text: "text-primary-500",
     percent: "8.67%",
@@ -23,7 +22,7 @@ const statistics = [
     percentClass: "text-primary-500",
   },
   {
-    title: "Conversion",
+    title: "INACTIVE",
     count: "15%",
     bg: "bg-primary-500",
     text: "text-danger-500",
@@ -33,8 +32,8 @@ const statistics = [
     percentClass: "text-danger-500",
   },
   {
-    title: "Leads",
-    count: "654",
+    title: "ACTIVE",
+    count: "3",
     bg: "bg-success-500",
     text: "text-primary-500",
     percent: "11.67%  ",

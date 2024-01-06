@@ -12,7 +12,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -36,8 +36,6 @@ export default function Home() {
 
   const dispatch = useDispatch();
   const { getApiData, postApiData } = useContext(ApiContext);
-
-  const { users } = useSelector((state) => state.auth);
   const {
     register,
     formState: { errors },
@@ -48,6 +46,16 @@ export default function Home() {
     mode: "all",
   });
   const router = useRouter();
+  const { isAuth } = useSelector((state) => state.auth);
+
+
+  useEffect(() => {
+    if (isAuth) {
+      router.push("/service");
+    }
+    //darkMode;
+  }, [isAuth]);
+
 
   const onSubmit = async (data) => {
     try {

@@ -30,11 +30,19 @@ function ClientProvider({children}) {
     GetClientList();
   }, []);
 
+  async function handlePageRefresh(update) {
+    if (update) {
+      GetClientList();
+    }
+  }
+
+
   return (
     <ClientContext.Provider
       value={{
         clientList,
         setClientList,
+        handlePageRefresh
       }}
     >
       {children}

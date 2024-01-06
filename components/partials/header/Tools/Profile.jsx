@@ -1,10 +1,9 @@
-import React from "react";
+import { handleLogout } from "@/components/partials/auth/store";
 import Dropdown from "@/components/ui/Dropdown";
 import Icon from "@/components/ui/Icon";
-import { Menu, Transition } from "@headlessui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { handleLogout } from "@/components/partials/auth/store";
+import { Menu } from "@headlessui/react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const ProfileLabel = () => {
   return (
@@ -40,51 +39,10 @@ const Profile = () => {
       icon: "heroicons-outline:user",
 
       action: () => {
-        router.push("/profile");
+        router.push("profile");
       },
     },
-    {
-      label: "Chat",
-      icon: "heroicons-outline:chat",
-      action: () => {
-        router.push("/chat");
-      },
-    },
-    {
-      label: "Email",
-      icon: "heroicons-outline:mail",
-      action: () => {
-        router.push("email");
-      },
-    },
-    {
-      label: "Todo",
-      icon: "heroicons-outline:clipboard-check",
-      action: () => {
-        router.push("/todo");
-      },
-    },
-    {
-      label: "Settings",
-      icon: "heroicons-outline:cog",
-      action: () => {
-        router.push("/settings");
-      },
-    },
-    {
-      label: "Price",
-      icon: "heroicons-outline:credit-card",
-      action: () => {
-        router.push("/pricing");
-      },
-    },
-    {
-      label: "Faq",
-      icon: "heroicons-outline:information-circle",
-      action: () => {
-        router.push("/faq");
-      },
-    },
+   
     {
       label: "Logout",
       icon: "heroicons-outline:login",

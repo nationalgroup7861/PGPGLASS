@@ -31,7 +31,7 @@ const campaigns = [
 const CrmPage = () => {
   return (
     <div>
-      <HomeBredCurbs title="Crm" />
+      <HomeBredCurbs title="PGP DASH BOARD" />
       <div className="space-y-5">
         <div className="grid grid-cols-12 gap-5">
           <div className="lg:col-span-8 col-span-12 space-y-5">
@@ -80,7 +80,7 @@ const CrmPage = () => {
           </div>
         </div>
 
-        <ExampleTwo title="Latest Transaction" />
+        <ExampleTwo title="Latest User" />
       </div>
     </div>
   );

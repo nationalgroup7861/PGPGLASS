@@ -8,6 +8,8 @@ import './globals.css';
 import { Provider } from 'react-redux';
 import store from '@/store';
 import { ApiProvider } from '@/context/ApiContext';
+import "./admin/scss/app.scss";
+
 
 const inter = Inter({ subsets: ['latin'] })
 

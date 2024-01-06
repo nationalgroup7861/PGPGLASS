@@ -4,32 +4,32 @@ export const menuItems = [
     title: "menu",
   },
 
+  // {
+  //   title: "Dashboard",
+  //   icon: "heroicons-outline:home",
+  //   isOpen: true,
+  //   isHide: true,
+  //   child: [
+     
+  //     {
+  //       childtitle: " CRM Dashbaord",
+  //       childlink: "crm",
+  //     },
+    
+  //   ],
+  // },
+  
+  // {
+  //   isHeadr: true,
+  //   title: "apps",
+  // },
+
   {
     title: "Dashboard",
-    icon: "heroicons-outline:home",
-    isOpen: true,
     isHide: true,
-    child: [
-     
-      {
-        childtitle: " CRM Dashbaord",
-        childlink: "crm",
-      },
-    
-    ],
+    icon: "heroicons-outline:home",
+    link: "pgp",
   },
-  
-  {
-    isHeadr: true,
-    title: "apps",
-  },
-
-  // {
-  //   title: "Chat",
-  //   isHide: true,
-  //   icon: "heroicons-outline:chat",
-  //   link: "chat",
-  // },
 
   // {
   //   title: "Email",
@@ -59,18 +59,18 @@ export const menuItems = [
   // },
 
   {
-    title: "Customer",
+    title: "User",
     icon: "heroicons-outline:user",
     link: "#",
     isHide: true,
     child: [
       {
-        childtitle: "Customer",
-        childlink: "client",
+        childtitle: "User",
+        childlink: "user",
       },
       {
-        childtitle: "Add Customer",
-        childlink: "client-add",
+        childtitle: "Add User",
+        childlink: "adduser",
       },
     ],
   },
