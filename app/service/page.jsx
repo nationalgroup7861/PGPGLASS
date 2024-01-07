@@ -1,12 +1,69 @@
 "use client";
+
+import { handleLogout } from "@/components/partials/auth/store";
+import Icons from "@/components/ui/Icon";
 import { exportToExcel } from "@/extra/ChatReport";
-import { ServiceHaedernew } from "@/section/service";
-import { UserIcon } from "@heroicons/react/24/outline";
-import { BardAPI } from "bardapi";
+import { Dialog, Menu, Transition } from "@headlessui/react";
+import {
+  ChevronUpDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
+import {
+  Bars3CenterLeftIcon,
+  ChartPieIcon,
+  FingerPrintIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+const navigation = [
+  {
+    name: "Chatgpt 4",
+    description: "Explore the power of ChatGPT-4.",
+    href: "#",
+    icon: ChartPieIcon,
+    current: true,
+  },
+
+  {
+    name: "InternalGPT",
+    description:
+      "Unlock innovation with InternalGPT, your AI companion for internal tasks",
+    href: "#",
+    current: false,
+    icon: FingerPrintIcon,
+  },
+];
+
+const tabs = [
+  { name: "All", href: "#", current: false },
+  { name: "Market Research", href: "#", current: true },
+  { name: "Competitor Information", href: "#", current: false },
+  { name: "New Trend", href: "#", current: false },
+  { name: "Import Export", href: "#", current: false },
+];
+
+const cardData = [
+  {
+    statement:
+      "What is total Market Growth For [Category] in [Region] for the last 5 years and projection for the next 3 years?",
+    icon: UserIcon, // Replace with your actual icon component
+  },
+  {
+    statement:
+      "[Category] Producers of the same in the [Region] with their revenue,EBIDTA, PAT for last 5 years and projection for next 3 years",
+    icon: UserIcon, // Replace with your actual icon component
+  },
+  {
+    statement:
+      "Are their any major regulatory restriction for importing [Category] bottles into [Region] from India or Srilanka?.",
+    icon: UserIcon, // Replace with your actual icon component
+  },
+];
 
 const selectToSAS = [
   { id: 1, name: "Beer Bottle" },
@@ -32,49 +89,50 @@ const selectToCountry = [
   { id: 10, name: "Spain" },
 ];
 
-// chatgpt 4, Bard, internalGPT
-
-const cardData = [
-  {
-    statement:
-      "What is total Market Growth For [Category] in [Region] for the last 5 years and projection for the next 3 years?",
-    icon: UserIcon, // Replace with your actual icon component
-  },
-  {
-    statement:
-      "[Category] Producers of the same in the [Region] with their revenue,EBIDTA, PAT for last 5 years and projection for next 3 years",
-    icon: UserIcon, // Replace with your actual icon component
-  },
-  {
-    statement:
-      "Are their any major regulatory restriction for importing [Category] bottles into [Region] from India or Srilanka?.",
-    icon: UserIcon, // Replace with your actual icon component
-  },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Service() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Example() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  // card  option selected
   const [selectedCard, setSelectedCard] = useState(0);
   const [selectedSasValue, setSelectedSasValue] = useState(selectToSAS[0].name);
   const [selectedCountryValue, setSelectedCOuntryValue] = useState(
     selectToCountry[0].name
   );
-  const [inputValue, setInputValue] = useState("");
-  const [outputValue, setOutputValue] = useState("");
-  const [chatHistory, setChatHistory] = useState([]); // To store chat history
+
   const [isQuery, setIsQuery] = useState(false);
   const router = useRouter();
   const { isAuth } = useSelector((state) => state.auth);
-  const [chatgptKey, setChatGptKey] = useState("");
-
-  const [chatSessionList, setChatSessionList] = useState([]);
-  const [currentChatSession, setCurrentChatSession] = useState('');
-
   const [userInfo, setUserInfo] = useState({});
+
+  const [inputValue, setInputValue] = useState("");
+  const [outputValue, setOutputValue] = useState("");
+
+  const [chatHistory, setChatHistory] = useState([]); // To store chat history
+
+  const [chatgptKey, setChatGptKey] = useState("");
+  const [chatSessionList, setChatSessionList] = useState([]);
+  const [currentChatSession, setCurrentChatSession] = useState("");
+
+  const handleSasValue = (event) => {
+    setSelectedSasValue(event.target.value);
+  };
+
+  const handleCountryValue = (event) => {
+    setSelectedCOuntryValue(event.target.value);
+  };
+
+  const handleCardClick = (index) => {
+    setSelectedCard(index);
+  };
+
+  const handleChatSessionValue = (event) => {
+    setCurrentChatSession(event.target.value);
+  };
 
   useEffect(() => {
     let user_type;
@@ -90,32 +148,46 @@ export default function Service() {
     }
   }, [isAuth]);
 
-  const handleSasValue = (event) => {
-    setSelectedSasValue(event.target.value);
-  };
-
-  const handleChatSessionValue = (event) => {
-    setCurrentChatSession(event.target.value);
-  };
 
 
 
-  const handleCountryValue = (event) => {
-    setSelectedCOuntryValue(event.target.value);
-  };
+  useEffect(() => {
+    const computedValue = cardData[selectedCard].statement
+      .replace("[Category]", selectedSasValue)
+      .replace("[Region]", selectedCountryValue);
 
-  const handleCardClick = (index) => {
-    setSelectedCard(index);
-  };
+    setInputValue(computedValue);
+  }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
-  const [editableStatement, setEditableStatement] = useState(
-    cardData[selectedCard].statement
-  );
+  useEffect(() => {
+    const currentsaveChatSeesion =
+      JSON.parse(localStorage.getItem("currentChatSession")) || {};
+    const chatSessionList =
+      JSON.parse(localStorage.getItem("chatSessionList")) || [];
+    const isEmptyObject = Object.keys(currentsaveChatSeesion).length === 0;
 
-  // Function to handle changes in the editable statement
-  const handleEditableStatementChange = (event) => {
-    setEditableStatement(event.target.value);
-  };
+    if (!isEmptyObject) {
+      const savedChats =
+        JSON.parse(localStorage.getItem(currentsaveChatSeesion.key)) || [];
+      // const reversedChats = savedChats.slice().reverse();
+      setChatHistory(savedChats);
+    } else {
+      const newSessionKey = generateChatKey();
+      const newSession = {
+        title: "New Chat",
+        key: newSessionKey,
+      };
+
+      const chatSessionList =
+        JSON.parse(localStorage.getItem("chatSessionList")) || [];
+      chatSessionList.unshift(newSession);
+      localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
+      localStorage.setItem("currentChatSession", JSON.stringify(newSession));
+    }
+
+    chatSessionList && setChatSessionList(chatSessionList);
+    currentsaveChatSeesion && setCurrentChatSession(currentsaveChatSeesion.key);
+  }, []);
 
   async function GetOpenAi(query) {
     const openai = new OpenAI({
@@ -130,48 +202,6 @@ export default function Service() {
     return chatCompletion.choices[0].message["content"];
   }
 
-  async function GetBardAi(query) {
-    const sessionId =
-      "bwiljy8gRLlrOygs9OVilTDS6G-BE8XiP4PYy5IZdUclAzq9dNCKIzSgjtajz6pGhBYzvA.";
-    const bard = new BardAPI({ sessionId });
-
-    const message = "Your message here";
-    bard.ask({ message }).then((response) => {
-      console.log("Response:", response.response);
-      console.log("Conversation ID:", response.conversationId);
-      console.log("Response ID:", response.responseId);
-      console.log("Choice ID:", response.choiceId);
-      console.log("Other Choices:", response.otherChoices);
-    });
-  }
-
-  useEffect(() => {
-    const currentsaveChatSeesion =JSON.parse(localStorage.getItem("currentChatSession")) || {};
-    const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
-    const isEmptyObject = Object.keys(currentsaveChatSeesion).length === 0;
-
-    if (!isEmptyObject) {
-      const savedChats =JSON.parse(localStorage.getItem(currentsaveChatSeesion.key)) || [];
-      // const reversedChats = savedChats.slice().reverse();
-      setChatHistory(savedChats);
-    } else {
-      const newSessionKey = generateChatKey();
-      const newSession = {
-        title: "New Chat",
-        key: newSessionKey,
-      };
-
-      const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
-      chatSessionList.unshift(newSession);
-      localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
-      localStorage.setItem("currentChatSession", JSON.stringify(newSession));
-    }
-
-    chatSessionList && setChatSessionList(chatSessionList);
-    currentsaveChatSeesion && setCurrentChatSession(currentsaveChatSeesion.key)
-
-  }, []);
-
   const generateChatKey = () => {
     const timestamp = new Date().getTime();
     const randomNumber = Math.floor(Math.random() * 100000);
@@ -179,7 +209,13 @@ export default function Service() {
   };
 
   const saveChatLocally = (answer) => {
-    const savedChats =JSON.parse(localStorage.getItem(currentChatSession)) || [];
+    const savedChats =
+      JSON.parse(localStorage.getItem(currentChatSession)) || [];
+    const chatSessionList =
+      JSON.parse(localStorage.getItem("chatSessionList")) || [];
+    const matchingChatSession = chatSessionList.find(
+      (session) => session.key == currentChatSession
+    );
     const newChat = {
       role: "user",
       content: inputValue,
@@ -189,15 +225,23 @@ export default function Service() {
       content: answer,
     };
     savedChats.unshift(newChat, newAiResponse); // Use unshift to add the new chat at the beginning
-    localStorage.setItem(
-      currentChatSession,
-      JSON.stringify(savedChats)
-    );
+    localStorage.setItem(currentChatSession, JSON.stringify(savedChats));
   };
 
   const handelQueryChange = async (name, row) => {
     setIsQuery(true);
     const answer = await GetOpenAi(row);
+
+    if (chatHistory.length === 0) {
+      const chatSessionList =
+        JSON.parse(localStorage.getItem("chatSessionList")) || [];
+      const matchingChatSession = chatSessionList.find(
+        (session) => session.key === currentChatSession
+      );
+      matchingChatSession.title = row; // Assuming 'row' contains the question title
+      localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
+    }
+
     setOutputValue(answer);
     saveChatLocally(answer);
     setChatHistory((prevChatHistory) => [
@@ -211,212 +255,689 @@ export default function Service() {
   };
 
   useEffect(() => {
-    const computedValue = cardData[selectedCard].statement
-      .replace("[Category]", selectedSasValue)
-      .replace("[Region]", selectedCountryValue);
-
-    setInputValue(computedValue);
-  }, [selectedCard, selectedSasValue, selectedCountryValue]);
-
-
-  useEffect(() => {
-    if(currentChatSession)
-    {
-        const savedChats =JSON.parse(localStorage.getItem(currentChatSession)) || [];
-        const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
-        const matchingChatSession = chatSessionList.find(session => session.key == currentChatSession);
-        localStorage.setItem("currentChatSession", JSON.stringify(matchingChatSession));
-        setChatHistory(savedChats);
-        setChatSessionList(chatSessionList)
-
+    if (currentChatSession) {
+      const savedChats =
+        JSON.parse(localStorage.getItem(currentChatSession)) || [];
+      const chatSessionList =
+        JSON.parse(localStorage.getItem("chatSessionList")) || [];
+      const matchingChatSession = chatSessionList.find(
+        (session) => session.key == currentChatSession
+      );
+      localStorage.setItem(
+        "currentChatSession",
+        JSON.stringify(matchingChatSession)
+      );
+      setChatHistory(savedChats);
+      setChatSessionList(chatSessionList);
     }
-  
   }, [currentChatSession]);
-
 
   const handleNewSessionClick = () => {
     const newSessionKey = generateChatKey();
     const newSession = {
-      title: "New Chat Session",
+      title: "New Chat",
       key: newSessionKey,
     };
-    const chatSessionList =JSON.parse(localStorage.getItem("chatSessionList")) || [];
+    const chatSessionList =
+      JSON.parse(localStorage.getItem("chatSessionList")) || [];
     chatSessionList.unshift(newSession);
     localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
     setCurrentChatSession(newSessionKey);
   };
 
-  
   const exportChatData = async () => {
     exportToExcel(chatHistory, userInfo);
   };
 
+  console.log(userInfo)
+
   return (
-    // <div className="lg:h-screen lg:w-screen bg-cover bg-repeat bg-gradient-to-r from-stone-500 to-stone-700">
-    // <div className="lg:h-screen lg:w-screen bg-cover bg-no-repeat bg-bottom bg-[url('/pgp_bg.jpg')]">
-    // <div className="min-h-screen bg-[url('/pgp_bg.jpg')] w-full overflow-hidden ">
-    <div className="min-h-screen bg-cover bg-no-repeat  bg-[url('/pgp_bg.jpg')]">
-      <ServiceHaedernew />
-      {/* <FullscreenDialog/> */}
-      <div className="mx-10 pb-10">
-        <div className="flex justify-between flex-wrap items-center mb-6 mr-20 sm:mr-0">
-          <h4 className="font-medium lg:text-2xl text-xl capitalize text-gray-50 inline-block ltr:pr-4 rtl:pl-4"></h4>
-          <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
-            <select
-              value={currentChatSession}
-              onChange={handleChatSessionValue}
-              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
+    <>
+      <div
+        className="min-h-full bg-cover bg-no-repeat  bg-bottom "
+        style={{
+          backgroundImage: `url(/pgp_bg.jpg)`,
+        }}
+      >
+        <Transition.Root show={sidebarOpen} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-40 lg:hidden"
+            onClose={setSidebarOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="transition-opacity ease-linear duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-linear duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
-              {chatSessionList?.map((option, index) => (
-                <option key={index} value={option.key}>
-                  {option.key}
-                </option>
-              ))}
-            </select>
+              <div className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+            </Transition.Child>
 
-            <select
-              value={selectedSasValue}
-              onChange={handleSasValue}
-              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
-            >
-              {selectToSAS.map((option, index) => (
-                <option key={index} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedCountryValue}
-              onChange={handleCountryValue}
-              className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-400 w-full max-w-xs"
-            >
-              {selectToCountry.map((option, index) => (
-                <option key={index} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex justify-between flex-wrap items-center mb-6 ml-10 gap-3">
-          <h4 className="font-medium  text-lg capitalize text-gray-50 inline-block ltr:pr-4 rtl:pl-4">
-            Query Here:
-          </h4>
-          <span className="flex-1 text-xl">
-            <textarea
-              className="border border-gray-300 p-2 rounded-md w-full text-base bg-gray-300"
-              value={inputValue}
-              rows="1" // Set the number of visible rows here
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </span>
-          <div className="flex flex-col space-y-1 sm:justify-end items-center ">
-            <button
-              className="btn  bg-slate-50 px-8 py-0 text-blue-700 rounded-full normal-case hover:bg-gray-100"
-              onClick={() => handelQueryChange("ChatGpt", inputValue)}
-              disabled={isQuery}
-            >
-              {isQuery && <span className="loading loading-spinner"></span>}
-              Query
-            </button>
-
-            <button
-              className="btn bg-slate-50 px-5 py-0 rounded-full normal-case hover:bg-gray-100"
-              onClick={exportChatData}
-            >
-              Save Chat
-            </button>
-
-            <button
-              className="btn bg-slate-50 px-5 py-0 rounded-full normal-case hover:bg-gray-100"
-              onClick={() => handleNewSessionClick()}
-            >
-              New Chat
-            </button>
-          </div>
-        </div>
-
-        {chatHistory.length > 0 && (
-          <div className="h-80 overflow-y-auto p-4 border rounded-lg bg-transparent hidescrollbar">
-            {
-              chatHistory
-                .slice()
-                .reverse()
-                .map((message, index, array) => (
-                  <div
-                    key={index}
-                    className={`mb-2 ${
-                      message.role === "user" ? "text-left" : "text-left"
-                    }`}
-                  >
-                    <span
-                      className={`${
-                        message.role === "user" ? "bg-blue-200" : "bg-green-200"
-                      } text-black px-4 py-2 rounded-lg inline-block`}
-                    >
-                      {message.role === "user" ? (
-                        // Display the question
-                        <strong>{message.content}</strong>
-                      ) : (
-                        // Display the answer
-                        <span>{message.content}</span>
-                      )}
-                    </span>
-                  </div>
-                ))
-                .reverse() // Reverse the order here
-            }
-          </div>
-        )}
-
-        <div className="tabs gap-2 mt-5">
-          <a className="tab rounded-lg  bg-white text-black-500 px-10">All</a>
-          <a className="tab tab-active rounded-lg  text-white bg-[#ff6600]  px-10">
-            Market Research
-          </a>
-          <a className="tab rounded-lg bg-white  text-black-500  px-10">
-            Competitor Information
-          </a>
-          <a className="tab rounded-lg  bg-white  text-black-500  px-10">
-            New Trend{" "}
-          </a>
-          <a className="tab rounded-lg  bg-white  text-black-500  px-10">
-            Import Export
-          </a>
-        </div>
-
-        <div className="flex flex-row gap-6 mt-5">
-          {cardData.map((card, index) => (
-            <div
-              key={index}
-              className={`card w-auto bg-base-100 shadow-xl ${
-                selectedCard === index
-                  ? " border-[#ff6600] border-4"
-                  : "border-gray-400  border-4"
-              }`}
-            >
-              <div
-                className="card-body bg-green-50 flex-col w-full rounded-xl"
-                onClick={() => handleCardClick(index)}
+            <div className="fixed inset-0 z-40 flex">
+              <Transition.Child
+                as={Fragment}
+                enter="transition ease-in-out duration-300 transform"
+                enterFrom="-translate-x-full"
+                enterTo="translate-x-0"
+                leave="transition ease-in-out duration-300 transform"
+                leaveFrom="translate-x-0"
+                leaveTo="-translate-x-full"
               >
-                {/* <div className="divider w-full right-0 top-0 left-0 bottom-0 m-0 p-0"></div> */}
-                {/* <h2 className="card-title"></h2> */}
-                <p className="text-black">{card.statement}</p>
-                <div className="card-actions justify-start">
-                  <div className="flex text-center gap-2">
-                    <card.icon
-                      className="h-5 w-5 mt-0 text-[#ff6600] "
-                      aria-hidden="true"
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-white pb-4 pt-5">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-in-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in-out duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute right-0 top-0 -mr-12 pt-2">
+                      <button
+                        type="button"
+                        className="relative ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <span className="absolute -inset-0.5" />
+                        <span className="sr-only">Close sidebar</span>
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+                  </Transition.Child>
+                  <div className="flex flex-shrink-0 items-center px-4">
+                    <img
+                      className="h-8 w-auto"
+                      src="/pgplogo.svg"
+                      alt="PGP GPT"
                     />
-                    <span className="text-base">PGP GLASS</span>
                   </div>
-                </div>
+                  <div className="mt-5 h-0 flex-1 overflow-y-auto">
+                    <nav className="px-2">
+                      <div className="space-y-1">
+                        {navigation.map((item) => (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                              "group flex items-center rounded-md px-2 py-2 text-base font-medium leading-5"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            <item.icon
+                              className={classNames(
+                                item.current
+                                  ? "text-gray-500"
+                                  : "text-gray-400 group-hover:text-gray-500",
+                                "mr-3 h-6 w-6 flex-shrink-0"
+                              )}
+                              aria-hidden="true"
+                            />
+                            {item.name}
+                          </a>
+                        ))}
+                      </div>
+                      <div className="mt-8">
+                        <h3
+                          className="px-3 text-sm font-medium text-gray-700"
+                          id="mobile-teams-headline"
+                        >
+                          Chat History
+                        </h3>
+                        <div
+                          className="mt-1 space-y-1"
+                          role="group"
+                          aria-labelledby="mobile-teams-headline"
+                        >
+                          {chatSessionList?.map((chat, index) => (
+                            <a
+                              key={index}
+                              onClick={() => setCurrentChatSession(chat.key)}
+                              className="group flex items-center rounded-md px-3 py-2 text-base font-medium leading-5 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                            >
+                              {currentChatSession == chat.key && (
+                                <span
+                                  className={classNames(
+                                    "bg-green-500",
+                                    "mr-4 h-3 w-10 rounded-full"
+                                  )}
+                                  aria-hidden="true"
+                                />
+                              )}
+                              <span className="truncate">{chat.title}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+              <div className="w-14 flex-shrink-0" aria-hidden="true">
+                {/* Dummy element to force sidebar to shrink to fit close icon */}
               </div>
             </div>
-          ))}
+          </Dialog>
+        </Transition.Root>
+
+        {/* Static sidebar for desktop */}
+        <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-[#ff6600] lg:bg-transparent lg:pb-4 lg:pt-5">
+          <div className="flex flex-shrink-0 items-center px-6">
+            <img className="h-20 w-auto" src="/pgplogo.svg" alt="PGP GPT" />
+          </div>
+          {/* Sidebar component, swap this element with another sidebar if you like */}
+          <div className="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
+            {/* User account dropdown */}
+            <Menu as="div" className="relative inline-block px-3 text-left">
+              <div>
+                <Menu.Button className="group w-full rounded-md bg-gray-100 px-3.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#ff6600] focus:ring-offset-2 focus:ring-offset-gray-100">
+                  <span className="flex w-full items-center justify-between">
+                    <span className="flex min-w-0 items-center justify-between space-x-3">
+                      <img
+                        className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"
+                        src="/loader.svg"
+                        alt=""
+                      />
+                      <span className="flex min-w-0 flex-1 flex-col">
+                        <span className="truncate text-sm font-medium text-gray-900">
+                          {userInfo?.name}
+                        </span>
+                        <span className="truncate text-sm text-gray-500">
+                        {userInfo?.email}
+                        </span>
+                      </span>
+                    </span>
+                    <ChevronUpDownIcon
+                      className="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute left-0 right-0 z-10 mx-3 mt-1 origin-top divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href="#"
+                          className={classNames(
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
+                          )}
+                        >
+                          View profile
+                        </a>
+                      )}
+                    </Menu.Item>
+                 
+                  </div>
+                 
+                  <div className="py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                        onClick={ ()=> dispatch(handleLogout({type:"admin"}))}
+                          className={classNames(
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
+                          )}
+                        >
+                          Logout
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+            {/* Sidebar Search */}
+            <div className="mt-5 px-3">
+              <label htmlFor="search" className="sr-only">
+                Search
+              </label>
+              <div className="relative mt-1 rounded-md shadow-sm">
+                <div
+                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                  aria-hidden="true"
+                >
+                  <MagnifyingGlassIcon
+                    className="h-4 w-4 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="block w-full rounded-md border-0 py-1.5 pl-9 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+            {/* Navigation */}
+            <nav className="mt-6 px-3">
+              <div className="space-y-1">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={classNames(
+                      item.current
+                        ? "bg-[#ff6600] text-white"
+                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900",
+                      "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    <item.icon
+                      className={classNames(
+                        item.current
+                          ? "text-gray-50"
+                          : "text-gray-400 group-hover:text-gray-500",
+                        "mr-3 h-6 w-6 flex-shrink-0"
+                      )}
+                      aria-hidden="true"
+                    />
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+              <div className="mt-8">
+                {/* Secondary navigation */}
+                <h3
+                  className="px-3 text-sm font-medium text-gray-700"
+                  id="desktop-teams-headline"
+                >
+                  Chat History
+                </h3>
+                <div
+                  className="mt-1 space-y-1"
+                  role="group"
+                  aria-labelledby="desktop-teams-headline"
+                >
+                  {chatSessionList.map((chat, index) => (
+                    <a
+                      key={index}
+                      onClick={() => setCurrentChatSession(chat.key)}
+                      className="group flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      {currentChatSession == chat.key && (
+                        <span
+                          className={classNames(
+                            "bg-green-500",
+                            "mr-4 h-3 w-10 rounded-full"
+                          )}
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span className="truncate">{chat.title}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+        {/* Main column */}
+        <div className="flex flex-col lg:pl-64">
+          {/* Search header */}
+          <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:hidden">
+            <button
+              type="button"
+              className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#ff6600] lg:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <span className="sr-only">Open sidebar</span>
+              <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
+            <div className="flex flex-1 justify-between px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-1">
+                <form className="flex w-full md:ml-0" action="#" method="GET">
+                  <label htmlFor="search-field" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+                      <MagnifyingGlassIcon
+                        className="h-5 w-5"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <input
+                      id="search-field"
+                      name="search-field"
+                      className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 focus:placeholder:text-gray-400 sm:text-sm"
+                      placeholder="Search"
+                      type="search"
+                    />
+                  </div>
+                </form>
+              </div>
+              <div className="flex items-center">
+                {/* Profile dropdown */}
+                <Menu as="div" className="relative ml-3">
+                  <div>
+                    <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6600] focus:ring-offset-2">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt=""
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              View profile
+                            </a>
+                          )}
+                        </Menu.Item>
+                        {/* <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Settings
+                            </a>
+                          )}
+                        </Menu.Item> */}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Notifications
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </div>
+                      
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                            onClick={ ()=> dispatch(handleLogout({type:"admin"}))}
+                            className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Logout
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            </div>
+          </div>
+          <main className="flex-1">
+            {/* Page title & actions */}
+            <div className="border-b border-[#ff6600] px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg font-semibold leading-6 text-[#ff6600] sm:truncate">
+                  PGPGPT
+                </h1>
+              </div>
+              <div className="mt-4 flex sm:ml-4 sm:mt-0">
+                <select
+                  value={selectedSasValue}
+                  onChange={handleSasValue}
+                  className="select rounded-lg select-bordered  bg-white ring-0 ring-gray-200 w-full max-w-xs"
+                >
+                  {selectToSAS.map((option, index) => (
+                    <option key={index} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={selectedCountryValue}
+                  onChange={handleCountryValue}
+                  className="ml-2 select rounded-lg select-bordered  bg-white ring-0 ring-gray-400 w-full max-w-xs"
+                >
+                  {selectToCountry.map((option, index) => (
+                    <option key={index} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-6 px-4 sm:px-6 lg:px-8">
+              <div className="sm:hidden">
+                <label htmlFor="tabs" className="sr-only">
+                  Select a tab
+                </label>
+                {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
+                <select
+                  id="tabs"
+                  name="tabs"
+                  className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  defaultValue={tabs.find((tab) => tab.current).name}
+                >
+                  {tabs.map((tab) => (
+                    <option key={tab.name}>{tab.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="hidden sm:block">
+                <nav className="flex space-x-4" aria-label="Tabs">
+                  {tabs.map((tab) => (
+                    <a
+                      key={tab.name}
+                      href={tab.href}
+                      className={classNames(
+                        tab.current
+                          ? "bg-[#ff6600] text-white"
+                          : "bg-white text-gray-500 hover:text-gray-700",
+                        "rounded-md px-3 py-2 text-sm font-medium"
+                      )}
+                      aria-current={tab.current ? "page" : undefined}
+                    >
+                      {tab.name}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </div>
+
+            <div className="mt-6 px-4 sm:px-6 lg:px-8">
+              <div className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {cardData.map((card, index) => (
+                  <div
+                    key={index}
+                    className={`overflow-hidden rounded-lg bg-base-100 shadow-xl ${
+                      selectedCard === index
+                        ? " border-[#ff6600] border-4"
+                        : "border-gray-400  border-4"
+                    }`}
+                  >
+                    <div
+                      className="p-5 bg-gray-50"
+                      onClick={() => handleCardClick(index)}
+                    >
+                      <div className="flex items-center">
+                        <div className="ml-5 w-0 flex-1">
+                          <div className="text-lg font-medium text-gray-900">
+                            {card.statement}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center bg-gray-300 px-5 py-3 gap-2">
+                      <div className="flex-shrink-0">
+                        <card.icon
+                          className="h-6 w-6 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="flex-1 text-sm">
+                        <a
+                          href={""}
+                          className="font-medium text-cyan-700 hover:text-cyan-900"
+                        >
+                          PGP GLASS
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6  sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+              <div className="min-w-0 flex-1">
+                <div className="mt-2 flex rounded-md shadow-sm border-gray-400  border-2">
+                  <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <h2 className="text-sm font-semibold text-gray-900">
+                        Query Here :
+                      </h2>
+                    </div>
+                    <textarea
+                      value={inputValue}
+                      rows="1"
+                      onChange={(e) => setInputValue(e.target.value)}
+                      className="block w-full rounded-none rounded-l-md border-0 py-3 pl-24 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                      placeholder=""
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handelQueryChange("ChatGpt", inputValue)}
+                    disabled={isQuery}
+                    className="relative -ml-px inline-flex items-center gap-x-2 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-300"
+                  >
+                    {isQuery && (
+                      <span className="loading loading-spinner"></span>
+                    )}
+                    <Icons
+                      icon="bi:send"
+                      className="-ml-0.5 h-5 w-5 text-[#ff6600]"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-4 pt-1 flex sm:ml-4 sm:mt-0">
+                <button
+                  type="button"
+                  onClick={exportChatData}
+                  className="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0"
+                >
+                  Save Chat
+                </button>
+                <button
+                  type="button"
+                  className="order-0 inline-flex items-center rounded-md bg-[#ff6600] px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#d95c00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d95c00] sm:order-1 sm:ml-3"
+                  onClick={() => handleNewSessionClick()}
+                >
+                  New Chat
+                </button>
+              </div>
+            </div>
+
+            {chatHistory.length > 0 && (
+              <div className="mt-6 px-4 sm:px-6 lg:px-8 ">
+                <div className="h-80 overflow-y-auto p-4  bg-black-50 border-gray-400  border-4 rounded-lg bg-transparent hidescrollbar">
+                  {
+                    chatHistory
+                      .slice()
+                      .reverse()
+                      .map((message, index, array) => (
+                        <div
+                          key={index}
+                          className={`mb-2 ${
+                            message.role === "user" ? "text-left" : "text-left"
+                          }`}
+                        >
+                          <span
+                            className={`${
+                              message.role === "user"
+                                ? "bg-blue-200"
+                                : "bg-green-200"
+                            } text-black px-4 py-2 rounded-lg inline-block`}
+                          >
+                            {message.role === "user" ? (
+                              // Display the question
+                              <strong>{message.content}</strong>
+                            ) : (
+                              // Display the answer
+                              <span>{message.content}</span>
+                            )}
+                          </span>
+                        </div>
+                      ))
+                      .reverse() // Reverse the order here
+                  }
+                </div>
+              </div>
+            )}
+          </main>
         </div>
       </div>
-    </div>
+    </>
   );
 }

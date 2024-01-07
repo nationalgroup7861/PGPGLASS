@@ -1,17 +1,15 @@
 "use client";
-import "react-toastify/dist/ReactToastify.css";
-import "simplebar-react/dist/simplebar.min.css";
+import { ApiProvider } from "@/context/ApiContext";
+import store from "@/store";
 import "flatpickr/dist/themes/light.css";
 import "leaflet/dist/leaflet.css";
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { Provider } from 'react-redux';
-import store from '@/store';
-import { ApiProvider } from '@/context/ApiContext';
+import { Inter } from "next/font/google";
+import { Provider } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
+import "simplebar-react/dist/simplebar.min.css";
 import "./admin/scss/app.scss";
 
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
 //   title: 'PGP GLASS',
@@ -20,20 +18,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({ children }) {
   return (
-    // <html lang="en">
-    //   <body className={inter.className}>
-    //   {children}
-    //     </body>
-    // </html>
-
-<html lang="en">
-<body className="font-inter custom-tippy dashcode-app">
-  <Provider store={store}>
-    <ApiProvider>
-    {children}
-    </ApiProvider>
-    </Provider>
-</body>
-</html>
-  )
+    <html lang="en" className="h-full">
+      <body className="font-inter h-full custom-tippy dashcode-app">
+        <Provider store={store}>
+          <ApiProvider>{children}</ApiProvider>
+        </Provider>
+      </body>
+    </html>
+  );
 }

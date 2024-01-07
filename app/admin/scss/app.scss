@@ -79,6 +79,17 @@
       border: none !important;
     }
 
+
+    .hidescrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .hidescrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    }
+    
     // .recharts-cartesian-grid line,
     // .recharts-polar-grid-angle line,
     // .recharts-yAxis line,
