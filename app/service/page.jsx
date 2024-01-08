@@ -376,11 +376,18 @@ export default function Example() {
       title: "New Chat",
       key: newSessionKey,
     };
+    const data = {
+      title: "New Chat",
+      session_key: newSessionKey,
+      client_id:userInfo?.id
+    };
+       
     const chatSessionList =
       JSON.parse(localStorage.getItem("chatSessionList")) || [];
     chatSessionList.unshift(newSession);
     localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
     setCurrentChatSession(newSessionKey);
+    CreateChatsessionList(data) 
   };
 
   const exportChatData = async () => {
