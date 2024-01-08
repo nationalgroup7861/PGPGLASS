@@ -20,3 +20,18 @@ export const USER_API = {
 };
 
 
+export const CHATSESSION_API = {
+  create: "/chat-session/create",
+  list: "/chat-session/getByClientId/",
+  delete:"/chat-session/delete/",
+};
+
+
+export const MESSAGE_API = {
+  create: "/message/create",
+  list: "/message/getByClientId/",
+  delete:"/message/delete/",
+};
+
+
+

@@ -2,7 +2,9 @@
 
 import { handleLogout } from "@/components/partials/auth/store";
 import Icons from "@/components/ui/Icon";
+import { ApiContext } from "@/context/ApiContext";
 import { exportToExcel } from "@/extra/ChatReport";
+import { CHATSESSION_API, CLIENT_API, MESSAGE_API } from "@/util/constant";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   ChevronUpDownIcon,
@@ -17,7 +19,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const navigation = [
@@ -104,6 +106,9 @@ export default function Example() {
     selectToCountry[0].name
   );
 
+  const { getApiData, postApiData,deleteApiData } = useContext(ApiContext);
+
+
   const [isQuery, setIsQuery] = useState(false);
   const router = useRouter();
   const { isAuth } = useSelector((state) => state.auth);
@@ -150,17 +155,18 @@ export default function Example() {
 
 
 
-
   useEffect(() => {
     const computedValue = cardData[selectedCard].statement
       .replace("[Category]", selectedSasValue)
       .replace("[Region]", selectedCountryValue);
-
     setInputValue(computedValue);
   }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
   useEffect(() => {
-    const currentsaveChatSeesion =
+
+    if(userInfo.id)
+    {
+      const currentsaveChatSeesion =
       JSON.parse(localStorage.getItem("currentChatSession")) || {};
     const chatSessionList =
       JSON.parse(localStorage.getItem("chatSessionList")) || [];
@@ -178,16 +184,92 @@ export default function Example() {
         key: newSessionKey,
       };
 
+      const data = {
+        title: "New Chat",
+        session_key: newSessionKey,
+        client_id:userInfo?.id
+      };
+         
       const chatSessionList =
         JSON.parse(localStorage.getItem("chatSessionList")) || [];
       chatSessionList.unshift(newSession);
       localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
       localStorage.setItem("currentChatSession", JSON.stringify(newSession));
+      CreateChatsessionList(data)
+
     }
 
     chatSessionList && setChatSessionList(chatSessionList);
     currentsaveChatSeesion && setCurrentChatSession(currentsaveChatSeesion.key);
-  }, []);
+    }
+    
+  }, [userInfo]);
+
+
+  async function GetChatsessionList() {
+    try {
+      const params={
+        client_id:userInfo.id,
+      }
+      const response = await getApiData(CHATSESSION_API.list+userInfo.id,params);
+      if (response) {
+        // setClientList(response.data.result.clients)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  
+  async function CreateChatsessionList(data) {
+    try {
+   
+      const response = await postApiData(CHATSESSION_API.create,data);
+      if (response) {
+        // setClientList(response.data.result.clients)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function CreateMessage(data) {
+    try {
+   
+      const response = await postApiData(MESSAGE_API.create,data);
+      if (response) {
+        // setClientList(response.data.result.clients)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  async function DeleteChatsessionList(id="") {
+    try {
+      const data={
+        client_id:userInfo.id,
+      }
+      const response = await deleteApiData(CHATSESSION_API.delete+id,data);
+      if (response) {
+        // setClientList(response.data.result.clients)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    if(userInfo.id)
+    {
+      GetChatsessionList();
+
+    }
+  }, [userInfo]);
+
 
   async function GetOpenAi(query) {
     const openai = new OpenAI({
@@ -224,8 +306,24 @@ export default function Example() {
       role: "ai",
       content: answer,
     };
+
+    const servernewChat = {
+      role: "user",
+      session_key	:currentChatSession,
+      content: inputValue,
+    };
+    const servernewAiResponse = {
+      role: "ai",
+      session_key	:currentChatSession,
+      content: answer,
+    };
+    
     savedChats.unshift(newChat, newAiResponse); // Use unshift to add the new chat at the beginning
     localStorage.setItem(currentChatSession, JSON.stringify(savedChats));
+
+     CreateMessage(servernewChat)
+     CreateMessage(servernewAiResponse)
+
   };
 
   const handelQueryChange = async (name, row) => {
@@ -289,7 +387,6 @@ export default function Example() {
     exportToExcel(chatHistory, userInfo);
   };
 
-  console.log(userInfo)
 
   return (
     <>

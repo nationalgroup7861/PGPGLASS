@@ -109,7 +109,7 @@ export const authSlice = createSlice({
       });
     },
     handleLogout: (state, action) => {
-      state.isAuth = action.payload;
+      state.isAuth = false;
       if (typeof window !== "undefined") {
         window?.localStorage.removeItem("isAuth");
         const user_type=action.payload.type;
