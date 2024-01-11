@@ -28,5 +28,4 @@ jobs:
           app-name: 'cookilg'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9BA660D66276497A9BA4EB8C74C4AA88 }}
-          startup-command: npm run dev
           package: .
