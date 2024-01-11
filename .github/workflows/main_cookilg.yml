@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +28,5 @@ jobs:
           app-name: 'cookilg'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9BA660D66276497A9BA4EB8C74C4AA88 }}
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "" # Built app content directory - optional
+          startup-command: npm run dev
+          package: .
