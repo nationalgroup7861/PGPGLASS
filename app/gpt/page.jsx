@@ -218,6 +218,7 @@ export default function Example() {
 
   const location = usePathname();
   const locationName = location.replace("/", "");
+  console.log(locationName);
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -279,8 +280,7 @@ export default function Example() {
       user_data = JSON.parse(window?.localStorage.getItem("pgp_user"));
       setUserInfo(user_data);
     }
-    console;
-    setChatGptKey(user_data?.chat_gpt4_key);
+    setChatGptKey(user_data?.chat_gpt3_key);
     if (!isAuth || !user_type) {
       router.push("/");
     }
@@ -395,31 +395,20 @@ export default function Example() {
     }
   }, [userInfo]);
 
-  
-
   async function GetOpenAi(query) {
     const openai = new OpenAI({
       apiKey: chatgptKey,
       dangerouslyAllowBrowser: true,
     });
-    const modifiedQuery = `${query} glass bottle`;
 
     const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: modifiedQuery }],
-      model: "gpt-4",
-      stream: true,
+      messages: [{ role: "user", content: query }],
+      model: "gpt-3.5-turbo",
     });
-  
-    let content = '';
-  
-    for await (const chunk of chatCompletion) {
-      content += chunk.choices[0]?.delta?.content || '';
-    }
-  
-    return content;
-  }
+    return chatCompletion.choices[0].message["content"];
 
-  
+    
+  }
 
   const generateChatKey = () => {
     const timestamp = new Date().getTime();
@@ -1007,6 +996,7 @@ export default function Example() {
                 </select>
               </div>
             </div>
+
             <div className="mt-6 px-4 sm:px-6 lg:px-8">
               <div className="sm:hidden">
                 <label htmlFor="tabs" className="sr-only">
@@ -1045,6 +1035,7 @@ export default function Example() {
                 </nav>
               </div>
             </div>
+
             <div className="mt-6 px-4 sm:px-6 lg:px-8">
               <div
                 className="flex justify-end items-center cursor-pointer"
@@ -1103,61 +1094,61 @@ export default function Example() {
                 ))}
               </div>
             </div>
-            {chatgptKey && (
-              <div className="mt-6  sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
-                <div className="min-w-0 flex-1">
-                  <div className="mt-2 flex rounded-md shadow-sm border-gray-400  border-2">
-                    <div className="relative flex flex-grow items-stretch focus-within:z-10">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <h2 className="text-sm font-semibold text-gray-900">
-                          Query Here :
-                        </h2>
-                      </div>
-                      <textarea
-                        value={inputValue}
-                        rows="1"
-                        onChange={(e) => setInputValue(e.target.value)}
-                        className="block w-full rounded-none rounded-l-md border-0 py-3 pl-24 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
-                        placeholder=""
-                      />
-                    </div>
 
-                    <Button
-                      type="button"
-                      onClick={() => handelQueryChange("ChatGpt", inputValue)}
-                      disabled={isQuery || !inputValue}
-                      isLoading={isQuery}
-                      className="relative -ml-px inline-flex items-center gap-x-2 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-300"
-                    >
-                      {isQuery && (
-                        <span className="loading loading-spinner"></span>
-                      )}
-                      <Icons
-                        icon="bi:send"
-                        className="-ml-0.5 h-5 w-5 text-[#ff6600]"
-                      />
-                    </Button>
+            {chatgptKey &&  <div className="mt-6  sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+              <div className="min-w-0 flex-1">
+                <div className="mt-2 flex rounded-md shadow-sm border-gray-400  border-2">
+                  <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <h2 className="text-sm font-semibold text-gray-900">
+                        Query Here :
+                      </h2>
+                    </div>
+                    <textarea
+                      value={inputValue}
+                      rows="1"
+                      onChange={(e) => setInputValue(e.target.value)}
+                      className="block w-full rounded-none rounded-l-md border-0 py-3 pl-24 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                      placeholder=""
+                    />
                   </div>
-                </div>
-                <div className="mt-4 pt-1 flex sm:ml-4 sm:mt-0">
-                  <button
+
+                  <Button
                     type="button"
-                    onClick={exportChatData}
-                    className="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0"
+                    onClick={() => handelQueryChange("ChatGpt", inputValue)}
+                    disabled={isQuery || !inputValue}
+                    isLoading={isQuery}
+                    className="relative -ml-px inline-flex items-center gap-x-2 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-300"
                   >
-                    Save Chat
-                  </button>
-                  <button
-                    type="button"
-                    className="order-0 inline-flex items-center rounded-md bg-[#ff6600] px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#d95c00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d95c00] sm:order-1 sm:ml-3"
-                    onClick={() => handleNewSessionClick()}
-                  >
-                    New Chat
-                  </button>
+                    {isQuery && (
+                      <span className="loading loading-spinner"></span>
+                    )}
+                    <Icons
+                      icon="bi:send"
+                      className="-ml-0.5 h-5 w-5 text-[#ff6600]"
+                    />
+                  </Button>
                 </div>
               </div>
-            )}
-            {chatgptKey && chatHistory.length > 0 && (
+              <div className="mt-4 pt-1 flex sm:ml-4 sm:mt-0">
+                <button
+                  type="button"
+                  onClick={exportChatData}
+                  className="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0"
+                >
+                  Save Chat
+                </button>
+                <button
+                  type="button"
+                  className="order-0 inline-flex items-center rounded-md bg-[#ff6600] px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#d95c00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d95c00] sm:order-1 sm:ml-3"
+                  onClick={() => handleNewSessionClick()}
+                >
+                  New Chat
+                </button>
+              </div>
+            </div> }
+
+            {chatgptKey &&  chatHistory.length > 0 && (
               <div className="mt-6 px-4 sm:px-6 lg:px-8 ">
                 <div className="h-80 overflow-y-auto p-4  bg-black-50 border-gray-400  border-4 rounded-lg bg-transparent hidescrollbar">
                   {
@@ -1194,9 +1185,9 @@ export default function Example() {
               </div>
             )}
 
-            {!chatgptKey && (
+{!chatgptKey && (
               <h2 className="mt-6 items-center text-center sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 text-lg font-bold leading-7 text-red-600">
-                Glass Gpt Is Not Activate for You
+                 GPT 3.5 Is Not Activate for You
               </h2>
             )}
           </main>

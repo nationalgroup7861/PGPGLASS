@@ -78,7 +78,7 @@ const ForgotPassPage = () => {
               </div>
             </div>
             <div className="auth-footer text-center">
-              Copyright 2021, PGP ADMIN All Rights Reserved.
+              Copyright 2024, PGPGPT All Rights Reserved.
             </div>
           </div>
         </div>

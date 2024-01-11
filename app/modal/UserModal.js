@@ -18,7 +18,8 @@ const UserModal = ({ open, closeDialog, referenceData }) => {
     password: referenceData.password,
     phone: referenceData.phone,
     address: referenceData.address,
-    chat_gpt_key: referenceData.chat_gpt_key,
+    chat_gpt3_key: referenceData.chat_gpt3_key,
+    chat_gpt4_key: referenceData.chat_gpt4_key,
     note: referenceData.note,
   };
 
@@ -29,7 +30,7 @@ const UserModal = ({ open, closeDialog, referenceData }) => {
       password: yup.string().required("Password is required"),
       phone: yup.string().required("Phone is required"),
       address: yup.string().required("Address is required"),
-      chat_gpt_key: yup.string().required("Chat Gpt Key is required"),
+      chat_gpt3_key: yup.string().required("Chat Gpt Key is required"),
     })
     .required();
 
@@ -51,12 +52,12 @@ const data={
     password: values.password,
     phone: values.phone,
     address: values.address,
-    chat_gpt_key: values.chat_gpt_key,
+    chat_gpt3_key: values.chat_gpt3_key,
+    chat_gpt4_key: values.chat_gpt4_key,
     note: values.note,
     id:referenceData?.id
 
 }
-console.log(data)
 try {
     const response = await postApiData(CLIENT_API.update, data);
     closeDialog({status:false,update:true})
@@ -116,13 +117,22 @@ try {
             error={errors.address}
           />
           <Textarea
-            name="chat_gpt_key"
+            name="chat_gpt3_key"
             label="CHATGPT KEY"
             type="text"
             placeholder="CHATGPT KEY"
             rows="2"
             register={register}
-            error={errors.chat_gpt_key}
+            error={errors.chat_gpt3_key}
+          />
+            <Textarea
+            name="chat_gpt4_key"
+            label="CHATGPT KEY"
+            type="text"
+            placeholder="CHATGPT KEY"
+            rows="2"
+            register={register}
+            error={errors.chat_gpt4_key}
           />
           <Textarea
             name="note"

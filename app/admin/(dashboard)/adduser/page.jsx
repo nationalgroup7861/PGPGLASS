@@ -31,7 +31,7 @@ const CLientAddPage = () => {
       password: yup.string().required("Password is required"),
       phone: yup.string().required("Phone is required"),
       address: yup.string().required("Address is required"),
-      chat_gpt_key: yup.string().required("Chat Gpt Key is required"),
+      chat_gpt3_key: yup.string().required("Chat Gpt Key is required"),
     })
     .required();
 
@@ -51,17 +51,16 @@ const CLientAddPage = () => {
 
   const onSubmit = async (data) => {
     const originalData = {
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      password: data.password,
-      address: data.address,
-      chat_gpt_key: data.chat_gpt_key,
-      note: data.note,
+      name: data?.name,
+      email: data?.email,
+      phone: data?.phone,
+      password: data?.password,
+      address: data?.address,
+      chat_gpt3_key: data?.chat_gpt3_key,
+      chat_gpt4_key: data?.chat_gpt4_key,
+      note: data?.note,
       issue_date: dayjs(picker).format('YYYY-MM-DD'),
-      note: data.note,
       status:1,
-
     };
 
     try {
@@ -149,13 +148,23 @@ const CLientAddPage = () => {
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
               <div className="lg:col-span-2 col-span-1">
                 <Textarea
-                  name="chat_gpt_key"
-                  label="CHATGPT KEY"
+                  name="chat_gpt3_key"
+                  label="CHATGPT 3 KEY"
                   type="text"
                   placeholder="CHATGPT KEY"
                   rows="2"
                   register={register}
-                  error={errors.chat_gpt_key}
+                  error={errors.chat_gpt3_key}
+                />
+
+               <Textarea
+                  name="chat_gpt4_key"
+                  label="CHATGPT 4 KEY"
+                  type="text"
+                  placeholder="CHATGPT KEY"
+                  rows="2"
+                  register={register}
+                  error={errors.chat_gpt4_key}
                 />
                 <Textarea
                   name="note"

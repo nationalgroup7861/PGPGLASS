@@ -119,8 +119,16 @@ const ClientPage = () => {
       },
     },
     {
-      Header: "Chat Gpt Key",
-      accessor: "chat_gpt_key",
+      Header: "GPT 3",
+      accessor: "chat_gpt3_key",
+      Cell: (row) => {
+        return <span>{row?.cell?.value}</span>;
+      },
+    },
+
+    {
+      Header: "GPT 4",
+      accessor: "chat_gpt4_key",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },

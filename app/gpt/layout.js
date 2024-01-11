@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 export default function AuthLayout({ children }) {
   const router = useRouter();
   const { isAuth } = useSelector((state) => state.auth);
+  console.log(isAuth)
   useEffect(() => {
   
     if (!isAuth) {

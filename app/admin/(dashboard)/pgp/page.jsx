@@ -2,7 +2,6 @@
 
 import HomeBredCurbs from "@/components/partials/HomeBredCurbs";
 import SelectMonth from "@/components/partials/SelectMonth";
-import ExampleTwo from "@/components/partials/table/ExampleTwo";
 import Calculation from "@/components/partials/widget/chart/Calculation";
 import GroupChart3 from "@/components/partials/widget/chart/group-chart-3";
 import Card from "@/components/ui/Card";
@@ -80,7 +79,7 @@ const CrmPage = () => {
           </div>
         </div>
 
-        <ExampleTwo title="Latest User" />
+        {/* <ExampleTwo title="Latest User" /> */}
       </div>
     </div>
   );
