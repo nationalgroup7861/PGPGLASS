@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const navigation = [
   {
-    name: "Glass Bot",
+    name: "Glass GPT",
     description: "Explore the power of ChatGPT-4.",
     link: "service",
     icon: ChartPieIcon,
@@ -39,7 +39,7 @@ const navigation = [
   },
 
   {
-    name: "InternalGPT",
+    name: "PGP-ProInsights",
     description:
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "internalgpt",
@@ -48,10 +48,26 @@ const navigation = [
   },
 
   {
-    name: "ALFIE",
+    name: "ALFIE(Rebranding)",
     description:
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "alfie",
+    current: false,
+    icon: FingerPrintIcon,
+  },
+    {
+    name: "Research GPT",
+    description:
+      "Unlock innovation with InternalGPT, your AI companion for internal tasks",
+    link: "researchgpt",
+    current: false,
+    icon: FingerPrintIcon,
+  },
+    {
+    name: "Design Craft",
+    description:
+      "Unlock innovation with InternalGPT, your AI companion for internal tasks",
+    link: "designcraft",
     current: false,
     icon: FingerPrintIcon,
   },
