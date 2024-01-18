@@ -992,7 +992,7 @@ export default function Example() {
               <div className="container mx-auto px-4">
                 <div className="max-w-2xl mx-auto text-center">
                   <h1 className="text-4xl font-bold mb-6">
-                  to be integrated
+                  To be Integrated
                   </h1>
                 </div>
               </div>
