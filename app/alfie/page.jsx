@@ -26,7 +26,7 @@ const navigation = [
     name: "Glass GPT",
     description: "Explore the power of ChatGPT-4.",
     link: "service",
-    icon: ChartPieIcon,
+    icon: "./icon/glass_gpt_icon.png",
     current: true,
   },
 
@@ -34,7 +34,7 @@ const navigation = [
     name: "GPT 3.5",
     description: "Explore the power of ChatGPT-4.",
     link: "gpt",
-    icon: ChartPieIcon,
+    icon: "/icon/gpt3.5_icon.png",
     current: false,
   },
 
@@ -44,7 +44,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "internalgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/props_gpt_icon.png",
   },
 
   {
@@ -53,7 +53,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "alfie",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/glass_gpt_icon2.png",
   },
     {
     name: "Research GPT",
@@ -61,7 +61,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "researchgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/research_gpt_icon.png",
   },
     {
     name: "Design Craft",
@@ -69,9 +69,10 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "designcraft",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/draft_gpt_icon.png",
   },
 ];
+
 
 const tabs = [
   { name: "All", href: "#", current: false },
@@ -622,15 +623,12 @@ export default function Example() {
                             )}
                             href={item.link}
                           >
-                            <item.icon
-                              className={classNames(
-                                item.link == locationName
-                                  ? "text-gray-500"
-                                  : "text-gray-400 group-hover:text-gray-500",
-                                "mr-3 h-6 w-6 flex-shrink-0"
-                              )}
-                              aria-hidden="true"
-                            />
+                              
+                              <img
+                      className="h-8 w-auto"
+                      src={item.icon}
+                      alt={item.name}
+                    />
                             {item.name}
                           </Link>
                         ))}
@@ -800,14 +798,11 @@ export default function Example() {
                     )}
                     href={item.link}
                   >
-                    <item.icon
-                      className={classNames(
-                        item.link == locationName
-                          ? "text-gray-50"
-                          : "text-gray-400 group-hover:text-gray-500",
-                        "mr-3 h-6 w-6 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
+                      
+                      <img
+                      className="h-8 w-auto"
+                      src={item.icon}
+                      alt={item.name}
                     />
                     {item.name}
                   </Link>

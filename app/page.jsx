@@ -56,12 +56,6 @@ const Login = () => {
               <div className=" relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6"></div>
               <div className="mx-auto font-normal text-slate-500 dark:text-slate-400 2xl:mt-12 mt-6 uppercase text-sm text-center">
                 Need Help ?
-                {/* <Link
-                  href="/"
-                  className="text-slate-900 dark:text-white font-medium hover:underline"
-                >
-                  Sign In
-                </Link> */}
               </div>
             </div>
           </div>

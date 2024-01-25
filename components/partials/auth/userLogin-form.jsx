@@ -1,3 +1,4 @@
+import Button from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
 import Textinput from "@/components/ui/Textinput";
 import { ApiContext } from "@/context/ApiContext";
@@ -23,7 +24,7 @@ const UserLoginForm = () => {
   const { users } = useSelector((state) => state.auth);
   const {
     register,
-    formState: { errors, isLoading },
+    formState: { errors, isLoading, isSubmitting },
     handleSubmit,
   } = useForm({
     resolver: yupResolver(schema),
@@ -33,14 +34,13 @@ const UserLoginForm = () => {
   const router = useRouter();
   const onSubmit = async (data) => {
     try {
-      const response = await postApiData(CLIENT_API.login, data);
+      const response = await postApiData(CLIENT_API.login, data,false);
       const result = response.data;
       if (result.status === 200) {
-        // dispatch(handleLogin(result.result));
         dispatch(handleLogin({ data: result.result, type: "user" }));
         setTimeout(() => {
           router.push("/service");
-        }, 100);
+        }, 2);
       } else {
         toast.error("Account is Disabled,Please Contact Admin", {
           position: "top-right",
@@ -54,16 +54,7 @@ const UserLoginForm = () => {
         });
       }
     } catch (error) {
-      toast.error("Invalid credentials", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      console.log(error);
     }
   };
 
@@ -101,43 +92,16 @@ const UserLoginForm = () => {
         </Link>
       </div>
 
-    
-
-<button
-      className={`btn btn-dark flex items-center justify-center w-full text-center ${
-        isLoading ? 'bg-gray-500' : 'bg-[#ff6600]'
-      }`}
-      type="submit"
-      disabled={isLoading}
-      >
-        {isLoading ? (
-          
-          <svg
-          className={`animate-spin  h-7 w-7 `}
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        ):
-
-        'Sign in'
-
-      }
-      </button>
+      <Button
+        text="Sign in"
+        type="submit"
+        disabled={isSubmitting}
+        className={`btn btn-dark flex items-center justify-center w-full text-center ${
+          isSubmitting ? "bg-gray-500" : "bg-[#ff6600]"
+        }`}
+        isLoading={isSubmitting}
+      />
+     
     </form>
   );
 };

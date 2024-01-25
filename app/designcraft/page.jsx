@@ -1,5 +1,7 @@
 "use client";
 import { handleLogout } from "@/components/partials/auth/store";
+import Button from "@/components/ui/Button";
+import Icons from "@/components/ui/Icon";
 import { ApiContext } from "@/context/ApiContext";
 import { exportToExcel } from "@/extra/ChatReport";
 import { CHATSESSION_API, MESSAGE_API } from "@/util/constant";
@@ -10,8 +12,6 @@ import {
 } from "@heroicons/react/20/solid";
 import {
   Bars3CenterLeftIcon,
-  ChartPieIcon,
-  FingerPrintIcon,
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -21,12 +21,17 @@ import OpenAI from "openai";
 import { Fragment, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+const isImageLink = (url) => {
+  // Check for specific query parameters that indicate it's an image link
+  return url.includes('rsct=image/png') || url.includes('rsct=image/jpeg');
+};
+
 const navigation = [
   {
     name: "Glass GPT",
     description: "Explore the power of ChatGPT-4.",
     link: "service",
-    icon: ChartPieIcon,
+    icon: "./icon/glass_gpt_icon.png",
     current: true,
   },
 
@@ -34,7 +39,7 @@ const navigation = [
     name: "GPT 3.5",
     description: "Explore the power of ChatGPT-4.",
     link: "gpt",
-    icon: ChartPieIcon,
+    icon: "/icon/gpt3.5_icon.png",
     current: false,
   },
 
@@ -44,7 +49,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "internalgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/props_gpt_icon.png",
   },
 
   {
@@ -53,23 +58,23 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "alfie",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/glass_gpt_icon2.png",
   },
-    {
+  {
     name: "Research GPT",
     description:
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "researchgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/research_gpt_icon.png",
   },
-    {
+  {
     name: "Design Craft",
     description:
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "designcraft",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/draft_gpt_icon.png",
   },
 ];
 
@@ -232,8 +237,6 @@ export default function Example() {
 
   const location = usePathname();
   const locationName = location.replace("/", "");
-  console.log(locationName);
-
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleCollapse = () => {
@@ -294,7 +297,7 @@ export default function Example() {
       user_data = JSON.parse(window?.localStorage.getItem("pgp_user"));
       setUserInfo(user_data);
     }
-    setChatGptKey(user_data?.chat_gpt_key);
+    setChatGptKey(user_data?.chat_gpt4_key);
     if (!isAuth || !user_type) {
       router.push("/");
     }
@@ -304,7 +307,7 @@ export default function Example() {
     const computedValue = cardData[selectedCard].statement
       .replace("[Category]", selectedSasValue)
       .replace("[Region]", selectedCountryValue);
-    setInputValue(computedValue);
+    // setInputValue(computedValue);
   }, [selectedCard, selectedSasValue, selectedCountryValue]);
 
   useEffect(() => {
@@ -409,26 +412,21 @@ export default function Example() {
     }
   }, [userInfo]);
 
-  async function GetOpenAi(query) {
+
+  async function GetImge(query) {
+
     const openai = new OpenAI({
       apiKey: chatgptKey,
       dangerouslyAllowBrowser: true,
     });
 
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: query }],
-      model: "gpt-3.5-turbo",
+    const chatCompletion = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: query,
+      n: 1,
+      size: "1024x1024",
     });
-    return chatCompletion.choices[0].message["content"];
-
-    const stream = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: "Say this is a test" }],
-      stream: true,
-    });
-    for await (const chunk of stream) {
-      process.stdout.write(chunk.choices[0]?.delta?.content || "");
-    }
+    return chatCompletion.data[0].url;
   }
 
   const generateChatKey = () => {
@@ -474,7 +472,7 @@ export default function Example() {
 
   const handelQueryChange = async (name, row) => {
     setIsQuery(true);
-    const answer = await GetOpenAi(row);
+    const answer = await GetImge(row);
 
     if (chatHistory.length === 0) {
       const chatSessionList =
@@ -482,7 +480,7 @@ export default function Example() {
       const matchingChatSession = chatSessionList.find(
         (session) => session.key === currentChatSession
       );
-      matchingChatSession.title = row; // Assuming 'row' contains the question title
+      matchingChatSession.title = row;
       localStorage.setItem("chatSessionList", JSON.stringify(chatSessionList));
     }
 
@@ -622,14 +620,10 @@ export default function Example() {
                             )}
                             href={item.link}
                           >
-                            <item.icon
-                              className={classNames(
-                                item.link == locationName
-                                  ? "text-gray-500"
-                                  : "text-gray-400 group-hover:text-gray-500",
-                                "mr-3 h-6 w-6 flex-shrink-0"
-                              )}
-                              aria-hidden="true"
+                            <img
+                              className="h-8 w-auto"
+                              src={item.icon}
+                              alt={item.name}
                             />
                             {item.name}
                           </Link>
@@ -800,14 +794,10 @@ export default function Example() {
                     )}
                     href={item.link}
                   >
-                    <item.icon
-                      className={classNames(
-                        item.link == locationName
-                          ? "text-gray-50"
-                          : "text-gray-400 group-hover:text-gray-500",
-                        "mr-3 h-6 w-6 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
+                    <img
+                      className="h-8 w-auto"
+                      src={item.icon}
+                      alt={item.name}
                     />
                     {item.name}
                   </Link>
@@ -988,15 +978,117 @@ export default function Example() {
               </div>
             </div>
 
-            <section className=" py-20">
-              <div className="container mx-auto px-4">
-                <div className="max-w-2xl mx-auto text-center">
-                  <h1 className="text-4xl font-bold mb-6">
-                  To be Integrated
-                  </h1>
+            {chatgptKey && (
+              <div className="mt-6  sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                <div className="min-w-0 flex-1">
+                  <div className="mt-2 flex rounded-md shadow-sm border-gray-400  border-2">
+                    <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <h2 className="text-sm font-semibold text-gray-900">
+                          Query Here :
+                        </h2>
+                      </div>
+                      <textarea
+                        value={inputValue}
+                        rows="1"
+                        onChange={(e) => setInputValue(e.target.value)}
+                        className="block w-full rounded-none rounded-l-md border-0 py-3 pl-24 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                        placeholder=""
+                      />
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={() => handelQueryChange("ChatGpt", inputValue)}
+                      disabled={isQuery || !inputValue}
+                      isLoading={isQuery}
+                      className="relative -ml-px inline-flex items-center gap-x-2 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-300"
+                    >
+                      {isQuery && (
+                        <span className="loading loading-spinner"></span>
+                      )}
+                      <Icons
+                        icon="bi:send"
+                        className="-ml-0.5 h-5 w-5 text-[#ff6600]"
+                      />
+                    </Button>
+                  </div>
+                </div>
+                <div className="mt-4 pt-1 flex sm:ml-4 sm:mt-0">
+                  <button
+                    type="button"
+                    onClick={exportChatData}
+                    className="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0"
+                  >
+                    Save Chat
+                  </button>
+                  <button
+                    type="button"
+                    className="order-0 inline-flex items-center rounded-md bg-[#ff6600] px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#d95c00] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d95c00] sm:order-1 sm:ml-3"
+                    onClick={() => handleNewSessionClick()}
+                  >
+                    New Chat
+                  </button>
                 </div>
               </div>
-            </section>
+            )}
+
+            {chatgptKey && chatHistory.length > 0 && (
+              <div className="mt-6 px-4 sm:px-6 lg:px-8 ">
+                <div className="h-80 overflow-y-auto p-4  bg-black-50 border-gray-400  border-4 rounded-lg bg-transparent hidescrollbar">
+                  {
+                    chatHistory
+                      .slice()
+                      .reverse()
+                      .map((message, index, array) => (
+                        <div
+                          key={index}
+                          className={`mb-2 ${
+                            message.role === "user" ? "text-left" : "text-left"
+                          }`}
+                        >
+                          <span
+                            className={`${
+                              message.role === "user"
+                                ? "bg-blue-200"
+                                : "bg-green-200"
+                            } text-black px-4 py-2 rounded-lg inline-block`}
+                          >
+                            {message.role === "user" ? (
+                              <strong>{message.content}</strong>
+                            ) : (
+                              // Display the answer
+
+                              // <span>{message.content}</span>
+
+                              <div className="flex items-center">
+                                
+                              {isImageLink(message.content) ? (
+                                <>
+                                <img src={message.content} alt="Image" className="rounded-lg max-w-full" />
+                                </>
+                              ) : (
+                                <span className="bg-green-200 text-black px-4 py-2 rounded-lg inline-block">
+                                  {message.content}
+                                </span>
+                              )}
+                            </div>
+              
+                            )}
+                          </span>
+                        </div>
+                      ))
+                      .reverse() // Reverse the order here
+                  }
+                </div>
+              </div>
+            )}
+
+            {!chatgptKey && (
+              <h2 className="mt-6 items-center text-center sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 text-lg font-bold leading-7 text-red-600">
+                DESIGN CRAFT IS NOT ENABLED FORN YOU
+              </h2>
+            )}
           </main>
         </div>
       </div>

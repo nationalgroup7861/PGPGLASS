@@ -21,6 +21,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import OpenAI from "openai";
 import { Fragment, useContext, useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 
 const navigation = [
@@ -28,7 +29,7 @@ const navigation = [
     name: "Glass GPT",
     description: "Explore the power of ChatGPT-4.",
     link: "service",
-    icon: ChartPieIcon,
+    icon: "./icon/glass_gpt_icon.png",
     current: true,
   },
 
@@ -36,7 +37,7 @@ const navigation = [
     name: "GPT 3.5",
     description: "Explore the power of ChatGPT-4.",
     link: "gpt",
-    icon: ChartPieIcon,
+    icon: "/icon/gpt3.5_icon.png",
     current: false,
   },
 
@@ -46,7 +47,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "internalgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/props_gpt_icon.png",
   },
 
   {
@@ -55,7 +56,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "alfie",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/glass_gpt_icon2.png",
   },
     {
     name: "Research GPT",
@@ -63,7 +64,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "researchgpt",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/research_gpt_icon.png",
   },
     {
     name: "Design Craft",
@@ -71,7 +72,7 @@ const navigation = [
       "Unlock innovation with InternalGPT, your AI companion for internal tasks",
     link: "designcraft",
     current: false,
-    icon: FingerPrintIcon,
+    icon: "/icon/draft_gpt_icon.png",
   },
 ];
 
@@ -228,7 +229,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function GLASSGPT() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -265,6 +266,9 @@ export default function Example() {
   const [chatgptKey, setChatGptKey] = useState("");
   const [chatSessionList, setChatSessionList] = useState([]);
   const [currentChatSession, setCurrentChatSession] = useState("");
+
+  const [conversation, setConversation] = useState([]);
+
 
   const filteredCardData =
     selectedTab === "All"
@@ -424,14 +428,27 @@ export default function Example() {
       messages: [{ role: "user", content: modifiedQuery }],
       model: "gpt-4",
       stream: true,
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    
     });
   
     let content = '';
-  
+
     for await (const chunk of chatCompletion) {
       content += chunk.choices[0]?.delta?.content || '';
+
+      // setConversation((prevConversation) => [
+      //   ...prevConversation,
+      //   chunk.choices[0]?.delta?.content,
+      // ]);
+
     }
-  
+
+    
     return content;
   }
 
@@ -628,7 +645,12 @@ export default function Example() {
                             )}
                             href={item.link}
                           >
-                            <item.icon
+                          <img
+                      className="h-8 w-auto"
+                      src={item.icon}
+                      alt={item.name}
+                    />
+                            {/* <item.icon
                               className={classNames(
                                 item.link == locationName
                                   ? "text-gray-500"
@@ -636,7 +658,7 @@ export default function Example() {
                                 "mr-3 h-6 w-6 flex-shrink-0"
                               )}
                               aria-hidden="true"
-                            />
+                            /> */}
                             {item.name}
                           </Link>
                         ))}
@@ -806,7 +828,7 @@ export default function Example() {
                     )}
                     href={item.link}
                   >
-                    <item.icon
+                    {/* <item.icon
                       className={classNames(
                         item.link == locationName
                           ? "text-gray-50"
@@ -814,7 +836,14 @@ export default function Example() {
                         "mr-3 h-6 w-6 flex-shrink-0"
                       )}
                       aria-hidden="true"
+                    /> */}
+
+                  <img
+                      className="h-8 w-auto"
+                      src={item.icon}
+                      alt={item.name}
                     />
+
                     {item.name}
                   </Link>
                 ))}
@@ -850,6 +879,8 @@ export default function Example() {
                       <span className="truncate">{chat.title}</span>
                     </a>
                   ))}
+
+    
                 </div>
               </div>
             </nav>
@@ -1173,9 +1204,23 @@ export default function Example() {
                 </div>
               </div>
             )}
+
+
+
             {chatgptKey && chatHistory.length > 0 && (
               <div className="mt-6 px-4 sm:px-6 lg:px-8 ">
                 <div className="h-80 overflow-y-auto p-4  bg-black-50 border-gray-400  border-4 rounded-lg bg-transparent hidescrollbar">
+              
+
+            {/* {conversation.map((message, index) => (
+      <div className="bg-green-200 text-black px-4 py-2 rounded-lg inline-block" key={index}>
+                            <ReactMarkdown >
+
+        {message}
+        </ReactMarkdown>
+        </div>
+    ))} */}
+
                   {
                     chatHistory
                       .slice()
@@ -1196,10 +1241,10 @@ export default function Example() {
                           >
                             {message.role === "user" ? (
                               // Display the question
-                              <strong>{message.content}</strong>
+                              <strong> <ReactMarkdown >{message.content}</ReactMarkdown></strong>
                             ) : (
                               // Display the answer
-                              <span>{message.content}</span>
+                              <span> <ReactMarkdown >{message.content}</ReactMarkdown></span>
                             )}
                           </span>
                         </div>

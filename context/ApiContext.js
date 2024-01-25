@@ -19,7 +19,9 @@ function ApiProvider({ children }) {
   async function postApiData(url, data = {}, showToast = true) {
     try {
       const response = await apiPostData(url, data);
-      toast.success("success", {
+
+
+     showToast && toast.success("success", {
         toastId: error_timeout,
         position: "top-right",
         autoClose: 2500,
@@ -38,10 +40,10 @@ function ApiProvider({ children }) {
       throw error;
     }
   }
-  async function getApiData(url, params = {}, signal) {
+  async function getApiData(url, params = {}, signal,showToast = true) {
     try {
       const response = await apiGetData(url, params, signal);
-      toast.success("success", {
+    showToast &&  toast.success("success", {
         toastId: error_timeout,
         position: "top-right",
         autoClose: 2500,
