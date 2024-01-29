@@ -4,6 +4,7 @@ import Textinput from "@/components/ui/Textinput";
 import { ApiContext } from "@/context/ApiContext";
 import { CLIENT_API } from "@/util/constant";
 import { yupResolver } from "@hookform/resolvers/yup";
+import ls from 'localstorage-slim';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
@@ -12,16 +13,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { handleLogin } from "./store";
-const schema = yup
+import { setSession } from "@/util/utils";
+
+
+const UserLoginForm = () => {
+  const dispatch = useDispatch();
+  const { getApiData, postApiData } = useContext(ApiContext);
+  const { users } = useSelector((state) => state.auth);
+  const schema = yup
   .object({
     email: yup.string().email("Invalid email").required("Email is Required"),
     password: yup.string().required("Password is Required"),
   })
   .required();
-const UserLoginForm = () => {
-  const dispatch = useDispatch();
-  const { getApiData, postApiData } = useContext(ApiContext);
-  const { users } = useSelector((state) => state.auth);
+
   const {
     register,
     formState: { errors, isLoading, isSubmitting },
@@ -31,12 +36,15 @@ const UserLoginForm = () => {
     //
     mode: "all",
   });
+
   const router = useRouter();
   const onSubmit = async (data) => {
     try {
       const response = await postApiData(CLIENT_API.login, data,false);
       const result = response.data;
       if (result.status === 200) {
+        setSession(result.result);
+        ls.set('pgp_user', result.result, { encrypt: true }); 
         dispatch(handleLogin({ data: result.result, type: "user" }));
         setTimeout(() => {
           router.push("/service");

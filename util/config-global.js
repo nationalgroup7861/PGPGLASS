@@ -2,9 +2,9 @@
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = "https://makhdumhusain.com/shippment_admin/public/api/";
+export const HOST_API = "https://makhdumhusain.com/pgpgptapi/public/api/";
 
-// export const HOST_API = "https://trend11.in//api/";
+// export const HOST_API = "http://192.168.1.38/pgpgptapi/public/api/";
 
 
 export const APP_NAME="PGP GLASS Admin"

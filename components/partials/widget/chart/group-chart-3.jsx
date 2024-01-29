@@ -42,7 +42,7 @@ const statistics = [
     percentClass: "text-primary-500",
   },
 ];
-const GroupChart3 = () => {
+const GroupChart3 = ({generalInfo}) => {
   return (
     <>
       {statistics.map((item, i) => (
@@ -62,7 +62,7 @@ const GroupChart3 = () => {
             {item.title}
           </span>
           <span className="block mb- text-2xl text-slate-900 dark:text-white font-medium mb-6">
-            {item.count}
+            {generalInfo?.total_clients}
           </span>
           <div className="flex space-x-2 rtl:space-x-reverse">
             <div className={` flex-none text-xl  ${item.text} `}>

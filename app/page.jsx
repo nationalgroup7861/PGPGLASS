@@ -2,19 +2,24 @@
 
 import UserLoginForm from "@/components/partials/auth/userLogin-form";
 import useDarkMode from "@/hooks/useDarkMode";
+import useRtl from "@/hooks/useRtl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ls from "localstorage-slim";
 
 const Login = () => {
   const [isDark] = useDarkMode();
   const dispatch = useDispatch();
   const router = useRouter();
   const { isAuth } = useSelector((state) => state.auth);
+  const [isRtl] = useRtl();
 
   useEffect(() => {
-    if (isAuth) {
+    const user_data = ls.get("pgp_user", { decrypt: true });
+
+    if (isAuth && user_data) {
       router.push("/service");
     }
   }, [isAuth]);
@@ -22,7 +27,7 @@ const Login = () => {
   return (
     <>
       <div
-        className="loginwrapper bg-cover bg-no-repeat  bg-bottom"
+        className="loginwrapper bg-cover bg-no-repeat  bg-bottom" dir={isRtl ? "rtl" : "ltr"}
         style={{
           backgroundImage: `url(/pgp_bg.jpg)`,
         }}

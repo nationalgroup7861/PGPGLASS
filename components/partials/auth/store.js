@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
+import { setSession } from "@/util/utils";
 
 const initialUsers = () => {
   if (typeof window !== "undefined") {
@@ -88,7 +89,8 @@ export const authSlice = createSlice({
         window?.localStorage.setItem("isAuth", JSON.stringify(state.isAuth));
         if(user_type=="user")
         {
-          window?.localStorage.setItem("pgp_user", JSON.stringify(state.users));
+
+          // window?.localStorage.setItem("pgp_user", JSON.stringify(state.users));
           window?.localStorage.setItem("user_type",true);
         }
         if(user_type=="admin")
@@ -111,6 +113,7 @@ export const authSlice = createSlice({
     handleLogout: (state, action) => {
       state.isAuth = false;
       if (typeof window !== "undefined") {
+        setSession();
         window?.localStorage.removeItem("isAuth");
         const user_type=action.payload.type;
         if(user_type=="user")

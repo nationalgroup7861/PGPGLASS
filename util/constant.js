@@ -7,7 +7,8 @@ export const CLIENT_API = {
   list: "/client",
   delete:"/client/delete/",
   update:"/client/update",
-
+  updateprofile:"/client/updateprofile",
+  updatepassword:"client/updatepassword"
 };
 
 export const USER_API = {
@@ -24,14 +25,22 @@ export const CHATSESSION_API = {
   create: "/chat-session/create",
   list: "/chat-session/getByClientId/",
   delete:"/chat-session/delete/",
+  updateTitle:"/chat-session/updateTitle",
+
 };
 
 
 export const MESSAGE_API = {
   create: "/message/create",
-  list: "/message/getByClientId/",
+  list: "/message/getByClientId",
   delete:"/message/delete/",
 };
+
+
+export const INFO_API = {
+info:'common/info'
+};
+
 
 
 
