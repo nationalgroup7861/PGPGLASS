@@ -57,7 +57,7 @@ export default function MobileHeader({handleMobileMenu}) {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="/loader.svg"
+                        src="/nlogo.png"
                         alt=""
                       />
                     </Menu.Button>

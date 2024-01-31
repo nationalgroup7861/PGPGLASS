@@ -93,7 +93,7 @@ const UserLoginForm = () => {
           label="Keep me signed in"
         />
         <Link
-          href="/admin/forgot-password"
+          href="/"
           className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >
           Forgot Password?{" "}

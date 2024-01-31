@@ -95,7 +95,7 @@ export const authSlice = createSlice({
         }
         if(user_type=="admin")
         {
-          window?.localStorage.setItem("pgp_admin", JSON.stringify(state.users));
+          // window?.localStorage.setItem("pgp_admin", JSON.stringify(state.users));
           window?.localStorage.setItem("admin_type",true);
         }
       }
@@ -116,6 +116,8 @@ export const authSlice = createSlice({
         setSession();
         window?.localStorage.removeItem("isAuth");
         const user_type=action.payload.type;
+        console.log(user_type)
+
         if(user_type=="user")
         {
           window?.localStorage.removeItem("pgp_user");
@@ -127,7 +129,9 @@ export const authSlice = createSlice({
           window?.localStorage.removeItem("admin_type");
         }
       }
-      toast.success("PGP User logged out successfully", {
+      window?.localStorage.removeItem("pgp_admin");
+      window?.localStorage.removeItem("admin_type");
+      toast.success("Log out successfully", {
         position: "top-right",
       });
     },

@@ -5,8 +5,6 @@ import Link from "next/link";
 
 const profile = () => {
 
-
-
   return (
     <div>
       <div className="space-y-5 profile-page">

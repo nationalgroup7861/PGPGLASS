@@ -76,7 +76,7 @@ export default function MobileSideBar({
                 </div>
               </Transition.Child>
               <div className="flex flex-shrink-0 items-center px-4">
-                <img className="h-8 w-auto" src="/pgplogo.svg" alt="PGP GPT" />
+                <img className="h-8 w-auto" src="/nlogo.png" alt="PGP GPT" />
               </div>
               <div className="mt-5 h-0 flex-1 overflow-y-auto">
                 <nav className="px-2">

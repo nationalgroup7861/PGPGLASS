@@ -3,7 +3,11 @@ import Link from "next/link";
 
 const PageNotFound = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center text-center py-20 dark:bg-slate-900">
+    <div className="min-h-screen flex flex-col justify-center bg-cover bg-no-repeat  bg-bottom items-center text-center py-10 dark:bg-slate-900"
+    style={{
+      backgroundImage: `url(/pgp_bg.jpg)`,
+    }}
+    >
       <img src="/nlogo.png" alt="PGPGPT" />
       <div className="max-w-[546px] mx-auto w-full mt-12">
         <h4 className="text-slate-900 mb-4">Page not found</h4>
@@ -15,7 +19,7 @@ const PageNotFound = () => {
       <div className="max-w-[300px] mx-auto w-full">
         <Link
           href="/"
-          className="btn bg-white hover:bg-opacity-75 transition-all duration-150 block text-center"
+          className="btn bg-[#ff6600] hover:bg-opacity-75 transition-all duration-150 block text-center text-white"
         >
           Go to homepage
         </Link>

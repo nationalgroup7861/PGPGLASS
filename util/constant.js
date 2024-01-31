@@ -38,7 +38,9 @@ export const MESSAGE_API = {
 
 
 export const INFO_API = {
-info:'common/info'
+info:'common/info',
+userdetail:'common/userdetail'
+
 };
 
 

@@ -10,10 +10,10 @@ const Loading = () => {
         <img
           src={
             isDark
-              ? "/logo.png"
-              : "/logo.png"
+              ? "/nlogo.png"
+              : "/nlogo.png"
           }
-          alt="Logo"
+          alt="PGPGPT"
         />
       </div>
 

@@ -1,30 +1,32 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { ToastContainer } from "react-toastify";
-import Header from "@/components/partials/header";
-import Sidebar from "@/components/partials/sidebar";
-import Settings from "@/components/partials/settings";
-import useWidth from "@/hooks/useWidth";
-import useSidebar from "@/hooks/useSidebar";
-import useContentWidth from "@/hooks/useContentWidth";
-import useMenulayout from "@/hooks/useMenulayout";
-import useMenuHidden from "@/hooks/useMenuHidden";
 import Footer from "@/components/partials/footer";
+import Header from "@/components/partials/header";
+import Settings from "@/components/partials/settings";
+import Sidebar from "@/components/partials/sidebar";
+import useContentWidth from "@/hooks/useContentWidth";
+import useMenuHidden from "@/hooks/useMenuHidden";
+import useMenulayout from "@/hooks/useMenulayout";
+import useSidebar from "@/hooks/useSidebar";
+import useWidth from "@/hooks/useWidth";
+import { usePathname, useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 // import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import Loading from "@/components/Loading";
+import MobileFooter from "@/components/partials/footer/MobileFooter";
 import MobileMenu from "@/components/partials/sidebar/MobileMenu";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import useDarkMode from "@/hooks/useDarkMode";
 import useMobileMenu from "@/hooks/useMobileMenu";
 import useMonoChrome from "@/hooks/useMonoChrome";
-import MobileFooter from "@/components/partials/footer/MobileFooter";
-import { useSelector } from "react-redux";
-import useRtl from "@/hooks/useRtl";
-import useDarkMode from "@/hooks/useDarkMode";
-import useSkin from "@/hooks/useSkin";
-import Loading from "@/components/Loading";
-import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import useNavbarType from "@/hooks/useNavbarType";
-import { motion, AnimatePresence } from "framer-motion";
+import useRtl from "@/hooks/useRtl";
+import useSkin from "@/hooks/useSkin";
+import { motion } from "framer-motion";
+import ls from 'localstorage-slim';
+import { useSelector } from "react-redux";
+
 export default function RootLayout({ children }) {
   const { width, breakpoints } = useWidth();
   const [collapsed] = useSidebar();
@@ -37,7 +39,10 @@ export default function RootLayout({ children }) {
   const { isAuth } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isAuth) {
+
+    const pgp_admin = ls.get("pgp_admin", { decrypt: true });
+
+    if (!isAuth && !pgp_admin) {
       router.push("/");
     }
     //darkMode;

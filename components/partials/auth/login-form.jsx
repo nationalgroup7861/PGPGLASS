@@ -1,16 +1,18 @@
-import React, { useContext, useState } from "react";
-import Textinput from "@/components/ui/Textinput";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
-import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { handleLogin } from "./store";
-import { toast } from "react-toastify";
+import Textinput from "@/components/ui/Textinput";
 import { ApiContext } from "@/context/ApiContext";
 import { USER_API } from "@/util/constant";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ls from 'localstorage-slim';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import * as yup from "yup";
+import { handleLogin } from "./store";
 const schema = yup
   .object({
     email: yup.string().email("Invalid email").required("Email is Required"),
@@ -20,15 +22,13 @@ const schema = yup
 const LoginForm = () => {
   const dispatch = useDispatch();
   const {getApiData,postApiData}=useContext(ApiContext);
-
   const { users } = useSelector((state) => state.auth);
   const {
     register,
-    formState: { errors },
+    formState: { errors,isSubmitting },
     handleSubmit,
   } = useForm({
     resolver: yupResolver(schema),
-    //
     mode: "all",
   });
   const router = useRouter();
@@ -41,10 +41,11 @@ const LoginForm = () => {
       if(result.status===200)
       {
         // dispatch(handleLogin(result.result));
+        ls.set('pgp_admin', result.result, { encrypt: true }); 
         dispatch(handleLogin({data:result.result,type:"admin"}));
            setTimeout(() => {
             router.push("/admin/pgp");
-          }, 100);
+          }, 2);
       }
       else{
         toast.error("Account is Disabled,Please Contact Admin", {
@@ -101,14 +102,24 @@ const LoginForm = () => {
           label="Keep me signed in"
         />
         <Link
-          href="/admin/forgot-password"
+          href="/"
           className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >
           Forgot Password?{" "}
         </Link>
       </div>
 
-      <button className="btn btn-dark block w-full text-center">Sign in</button>
+      <Button
+        text="Sign in"
+        type="submit"
+        disabled={isSubmitting}
+        className={`btn btn-dark flex items-center justify-center w-full text-center ${
+          isSubmitting ? "bg-gray-500" : "bg-[#ff6600]"
+        }`}
+        isLoading={isSubmitting}
+      />
+
+      {/* <button className="btn btn-dark block w-full text-center">Sign in</button> */}
     </form>
   );
 };

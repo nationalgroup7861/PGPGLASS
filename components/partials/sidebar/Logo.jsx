@@ -25,13 +25,13 @@ const SidebarLogo = ({ menuHover }) => {
       
       `}
     >
-      <Link href="/analytics">
+      <Link href="/admin/pgp">
         <div className="flex items-center space-x-4">
           <div className="logo-icon">
             {!isDark && !isSemiDark ? (
-              <img src="/logo.svg" alt="" width={"100px"} height={"50px"}/>
+              <img src="/nlogo.png" alt="" width={"100px"} height={"50px"}/>
             ) : (
-              <img src="/logo-white.svg" alt="" width={"100px"} height={"50px"} />
+              <img src="/nlogo.png" alt="" width={"100px"} height={"50px"} />
             )}
           </div>
 

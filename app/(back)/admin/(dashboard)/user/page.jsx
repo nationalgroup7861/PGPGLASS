@@ -1,25 +1,24 @@
 /* eslint-disable react/display-name */
 "use client";
-import React, { useState, useMemo, useContext } from "react";
-import { advancedTable } from "@/constant/table-data";
-import Card from "@/components/ui/Card";
-import Icon from "@/components/ui/Icon";
-import Dropdown from "@/components/ui/Dropdown";
+import ConfirmationModal from "@/app/modal/ConfirmationModal";
+import UserModal from "@/app/modal/UserModal";
+import GlobalFilter from "@/components/partials/table/GlobalFilter";
 import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Dropdown from "@/components/ui/Dropdown";
+import Icon from "@/components/ui/Icon";
+import { ApiContext } from "@/context/ApiContext";
+import { ClientContext } from "@/context/ClientContext";
+import { CLIENT_API } from "@/util/constant";
 import { useRouter } from "next/navigation";
+import React, { useContext, useMemo, useState } from "react";
 import {
-  useTable,
-  useRowSelect,
-  useSortBy,
   useGlobalFilter,
   usePagination,
+  useRowSelect,
+  useSortBy,
+  useTable,
 } from "react-table";
-import GlobalFilter from "@/components/partials/table/GlobalFilter";
-import { ClientContext } from "@/context/ClientContext";
-import UserModal from "@/app/modal/UserModal";
-import ConfirmationModal from "@/app/modal/ConfirmationModal";
-import { CLIENT_API } from "@/util/constant";
-import { ApiContext } from "@/context/ApiContext";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -45,19 +44,28 @@ const IndeterminateCheckbox = React.forwardRef(
 
 const ClientPage = () => {
   const router = useRouter();
-  const { clientList, setClientList,handlePageRefresh } = useContext(ClientContext);
+  const { clientList, setClientList, handlePageRefresh } =
+    useContext(ClientContext);
   const [userModal, setUserModal] = useState({ status: false, data: "" });
   const [userDetail, setUserDetail] = useState({});
-  const { getApiData, putApiData, postApiData,deleteApiData } = useContext(ApiContext);
+  const { getApiData, putApiData, postApiData, deleteApiData } =
+    useContext(ApiContext);
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    alert("Value copied!");
+  };
 
   const actions = [
-    // {
-    //   name: "view",
-    //   icon: "heroicons-outline:eye",
-    //   doit: () => {
-    //     router.push("/clinet-preview");
-    //   },
-    // },
+    {
+      name: "view",
+      icon: "heroicons-outline:eye",
+      doit: (row) => {
+        // router.push("/user/{$row.name}");
+        router.push(`./user/${row.id}`);
+
+      },
+    },
     {
       name: "edit",
       icon: "heroicons:pencil-square",
@@ -75,13 +83,7 @@ const ClientPage = () => {
     },
   ];
   const COLUMNS = [
-    {
-      Header: "Id",
-      accessor: "id",
-      Cell: (row) => {
-        return <span>{row?.cell?.value}</span>;
-      },
-    },
+   
     {
       Header: "customer",
       accessor: "name",
@@ -121,8 +123,23 @@ const ClientPage = () => {
     {
       Header: "GPT 3",
       accessor: "chat_gpt3_key",
+      // Cell: (row) => {
+      //   return <span>{row?.cell?.value}</span>;
+      // },
+
       Cell: (row) => {
-        return <span>{row?.cell?.value}</span>;
+        const value = row?.cell?.value;
+
+        return (
+          <div>
+            <Button
+              className="rounded bg-indigo-100 px-2 py-1 text-xs font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              onClick={() => copyToClipboard(value)}
+            >
+              Copy
+            </Button>
+          </div>
+        );
       },
     },
 
@@ -130,7 +147,17 @@ const ClientPage = () => {
       Header: "GPT 4",
       accessor: "chat_gpt4_key",
       Cell: (row) => {
-        return <span>{row?.cell?.value}</span>;
+        const value = row?.cell?.value;
+        return (
+          <div>
+            <Button
+              className="rounded bg-indigo-100 px-2 py-1 text-xs font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+              onClick={() => copyToClipboard(value)}
+            >
+              Copy
+            </Button>
+          </div>
+        );
       },
     },
 
@@ -300,7 +327,7 @@ const ClientPage = () => {
           <h6 className="flex-1 md:mb-0 mb-3">User</h6>
           <div className="md:flex md:space-x-3 items-center flex-none rtl:space-x-reverse">
             <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-            <Button
+            {/* <Button
               icon="heroicons-outline:calendar"
               text="Select date"
               className=" btn-outline-secondary dark:border-slate-700  text-slate-600 btn-sm font-normal dark:text-slate-300 "
@@ -311,7 +338,7 @@ const ClientPage = () => {
               text="Filter"
               className=" btn-outline-secondary text-slate-600 dark:border-slate-700 dark:text-slate-300 font-normal btn-sm "
               iconClass="text-lg"
-            />
+            /> */}
             <Button
               icon="heroicons-outline:plus-sm"
               text="Add User"
