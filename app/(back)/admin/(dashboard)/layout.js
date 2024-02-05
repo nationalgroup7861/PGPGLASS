@@ -19,7 +19,6 @@ import MobileMenu from "@/components/partials/sidebar/MobileMenu";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import useDarkMode from "@/hooks/useDarkMode";
 import useMobileMenu from "@/hooks/useMobileMenu";
-import useMonoChrome from "@/hooks/useMonoChrome";
 import useNavbarType from "@/hooks/useNavbarType";
 import useRtl from "@/hooks/useRtl";
 import useSkin from "@/hooks/useSkin";
@@ -34,7 +33,6 @@ export default function RootLayout({ children }) {
   const [isDark] = useDarkMode();
   const [skin] = useSkin();
   const [navbarType] = useNavbarType();
-  const [isMonoChrome] = useMonoChrome();
   const router = useRouter();
   const { isAuth } = useSelector((state) => state.auth);
 

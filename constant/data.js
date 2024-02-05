@@ -10,7 +10,7 @@ export const menuItems = [
     title: "Dashboard",
     isHide: true,
     icon: "heroicons-outline:home",
-    link: "pgp",
+    link: "admin/pgp",
   },
 
   {
@@ -21,11 +21,11 @@ export const menuItems = [
     child: [
       {
         childtitle: "User",
-        childlink: "user",
+        childlink: "admin/user",
       },
       {
         childtitle: "Add User",
-        childlink: "adduser",
+        childlink: "admin/adduser",
       },
     ],
   },

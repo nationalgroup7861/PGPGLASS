@@ -18,8 +18,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-
-
 export default function DESIGNDRAFT() {
   // USER INFO
   const router = useRouter();
@@ -177,9 +175,9 @@ export default function DESIGNDRAFT() {
       n: 1,
       size: "1024x1024",
     });
+    console.log(chatCompletion.data)
     return chatCompletion.data[0].url;
   }
-
 
 
   //verify now

@@ -97,7 +97,7 @@ export default function GLASSGPT() {
 
   // select value from select card and country and sasvalue
   useEffect(() => {
-    const computedValue = cardData[selectedCard].statement
+    const computedValue = filteredCardData[selectedCard].statement
       .replace("[Category]", selectedSasValue)
       .replace("[Region]", selectedCountryValue);
     setInputValue(computedValue);

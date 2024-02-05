@@ -82,7 +82,7 @@ const LoginForm = () => {
       <Textinput
         name="email"
         label="email"
-        defaultValue="admin@pgp.com"
+        // defaultValue="admin@pgp.com"
         type="email"
         register={register}
         error={errors?.email}
@@ -91,7 +91,7 @@ const LoginForm = () => {
         name="password"
         label="passwrod"
         type="password"
-        defaultValue="admin@123"
+        // defaultValue="admin@123"
         register={register}
         error={errors.password}
       />
@@ -105,7 +105,7 @@ const LoginForm = () => {
           href="/"
           className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >
-          Forgot Password?{" "}
+          Forgot Password?
         </Link>
       </div>
 

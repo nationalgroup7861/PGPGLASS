@@ -20,7 +20,7 @@ export default function SideBar({userInfo,chatSessionList,currentChatSession,han
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-[#ff6600] lg:bg-transparent lg:pb-4 lg:pt-5">
-      <div className="flex flex-shrink-0 items-center px-6">
+      <div className="flex flex-shrink-0 items-center justify-center px-6">
         <img className="h-20 w-auto" src="/nlogo.png" alt="PGP GPT" />
       </div>
       {/* Sidebar component, swap this element with another sidebar if you like */}

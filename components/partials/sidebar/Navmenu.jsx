@@ -1,11 +1,10 @@
-import { useRouter, usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { Collapse } from "react-collapse";
-import Icon from "@/components/ui/Icon";
 import { toggleActiveChat } from "@/components/partials/app/chat/store";
-import { useDispatch } from "react-redux";
+import Icon from "@/components/ui/Icon";
 import useMobileMenu from "@/hooks/useMobileMenu";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Submenu from "./Submenu";
 const Navmenu = ({ menus }) => {
   const router = useRouter();
@@ -21,6 +20,9 @@ const Navmenu = ({ menus }) => {
 
   const location = usePathname();
   const locationName = location.replace("/", "");
+
+  console.log(location)
+  console.log(locationName)
 
   const [mobileMenu, setMobileMenu] = useMobileMenu();
   const dispatch = useDispatch();
@@ -61,7 +63,8 @@ const Navmenu = ({ menus }) => {
           >
             {/* single menu with no childred*/}
             {!item.child && !item.isHeadr && (
-              <Link className="menu-link" href={item.link}>
+              <Link className="menu-link" href={`/${item.link}`}>
+
                 <span className="menu-icon flex-grow-0">
                   <Icon icon={item.icon} />
                 </span>
