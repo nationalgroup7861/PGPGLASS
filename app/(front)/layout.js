@@ -1,22 +1,44 @@
 "use client";
 
-import { setSession } from "@/util/utils";
+import ls from "localstorage-slim";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import ls from "localstorage-slim";
+
+import Context from "@/context/Context";
+
+import BackToTop from "@/app/backToTop";
+import Modal from "@/components/Common/Modal";
+import HeaderDashboard from "@/components/Header/HeaderDashboard";
+import LeftDashboardSidebar from "@/components/Header/LeftDashboardSidebar";
+import PopupMobileMenu from "@/components/Header/PopUpMobileMenu";
+
 
 export default function AuthLayout({ children }) {
   const router = useRouter();
-  const { isAuth } = useSelector((state) => state.auth);
+  
   useEffect(() => {
     const user_data = ls.get("pgp_user", { decrypt: true });
-    setSession(user_data);
-    if (!isAuth && !user_data) {
+    const isAuth = ls.get("isAuth");
+    if (!isAuth || !user_data) {
       router.push("/");
     }
-  
-  }, [isAuth]);
+  }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      <main className="page-wrapper rbt-dashboard-page">
+        <div className="rbt-panel-wrapper">
+          <Context>
+            <LeftDashboardSidebar />
+            <HeaderDashboard display="" />
+            <Modal />
+            <PopupMobileMenu />
+            {children}
+            <BackToTop />
+
+          </Context>
+        </div>
+      </main>
+    </>
+  );
 }

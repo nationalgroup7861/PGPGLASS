@@ -1,0 +1,67 @@
+{
+  "footer": [
+    {
+      "links": [
+        {
+          "title": "Qucik Links",
+          "innerItem": [
+            {
+              "link": "#",
+              "text": "Pages"
+            },
+            {
+              "link": "/",
+              "text": "Blog"
+            },
+            {
+              "link": "/",
+              "text": "Contact"
+            },
+            {
+              "link": "/",
+              "text": "How to use"
+            },
+            {
+              "link": "/",
+              "text": "Roadmap"
+            }
+          ]
+        }
+      ],
+      "services": [
+        {
+          "title": "Services",
+          "innerItem": [
+            {
+              "link": "/",
+              "text": "Image Generator"
+            },
+            {
+              "link": "/",
+              "text": "Video Generator"
+            },
+            {
+              "link": "/text-generator",
+              "text": "Text Generator"
+            },
+            {
+              "link": "/",
+              "text": "Code Generator"
+            },
+            {
+              "link": "#",
+              "text": "Education Feedback"
+            }
+          ]
+        }
+      ],
+      "contact": [
+        {
+          "location": "8819 Ohio St. South Gate, North America, USA",
+          "mail": "example@domain.com",
+          "number": "1 386-688-3295"
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import axiosInstance from "@/util/axios";
+import axiosInstance from "../util/axios";
 
 async function apiGetData(url, params, signal) {
     return axiosInstance.get(url, { params, signal });
