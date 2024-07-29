@@ -32,7 +32,7 @@ const Alfie = () => {
     return <Loading />;
   }
 
-  if (permissions?.alfie) {
+  if (!permissions?.alfie) {
     return <CenteredMessage icon="fa-shield-keyhole" message="Alfie Is Not Activated for You" />;
   }
 
