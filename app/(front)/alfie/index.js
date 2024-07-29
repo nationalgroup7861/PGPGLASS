@@ -1,5 +1,8 @@
 "use client";
 
+import { AlfieGptContext } from "@/app/context/AlfieGptContext";
+import { useContext } from "react";
+
 
 
 const CenteredMessage = ({ icon, message }) => (
@@ -14,7 +17,7 @@ const CenteredMessage = ({ icon, message }) => (
 const Loading = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
     <div className="text-center">
-      <div className="spinner-border spinner-large color-primary display-1"   role="status">
+      <div className="spinner-border spinner-large color-primary display-1" role="status">
         <span className="sr-only">Loading...</span>
       </div>
     </div>
@@ -22,37 +25,28 @@ const Loading = () => (
 );
 
 
-
 const Alfie = () => {
+  const { chatgptKey, permissions,isLoading } = useContext(AlfieGptContext);
 
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  // if (!permissions?.Alfie_35) {
-  //   return <CenteredMessage icon="fa-shield-keyhole" message="Gpt 3.5 Is Not Activated for You" />;
-  // }
+  if (permissions?.alfie) {
+    return <CenteredMessage icon="fa-shield-keyhole" message="Alfie Is Not Activated for You" />;
+  }
 
-  // if (!chatgptKey) {
-  //   return <CenteredMessage icon="fa-key" message="Gpt 3.5 Key is Not Activated for You" />;
-  // }
 
   return (
     <>
-    {/* <div className="rbt-main-content">
-      <div className="rbt-daynamic-page-content">
-        <div className="rbt-dashboard-content">
-          <div className="content-page">
-            <div className="chat-box-section">
-              <GptGenerator />
-              <GptStaticBarDashboard />
-            </div>
-          </div>
-        </div>
+
+      <div className="rbt-main-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
+        <iframe
+          src="https://pgpfirst.lightinfosys.com/assist/28?bot_id=28&test=true&train_or_publish=publish"
+          title="Alfie Uat"
+          style={{ width: '100%', height: '80%', border: 'none' }}
+        />
       </div>
-    </div> */}
-    <CenteredMessage icon="fa-shield-keyhole" message="We are converting it into LLM Based Engine for HR and
-                    Finance. ALFIE will be rebranded" />
     </>
   );
 };

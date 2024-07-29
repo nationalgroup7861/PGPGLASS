@@ -27,7 +27,7 @@ function AlfieGptProvider({ children }) {
   async function GetChatsessionList() {
     setIsLoading(true)
     try {
-      const params = { client_id: userInfo.id, type: "delly" };
+      const params = { client_id: userInfo.id, type: "gpt" };
       const response = await getApiData(CHATSESSION_API.list + userInfo.id,params);
       if (response) {
         const data = response.data.result.chatSessions;
@@ -115,7 +115,6 @@ function AlfieGptProvider({ children }) {
       user_data = ls.get("pgp_user", { decrypt: true });
       setUserInfo(user_data);
     }
-    // setChatGptKey(user_data?.chat_gpt4_key);
    
   }, []);
 
@@ -126,7 +125,7 @@ function AlfieGptProvider({ children }) {
       localStorage.removeItem("chatSessionList")
       localStorage.removeItem("currentChatSession")
       GetPermissionandkey();
-      GetChatsessionList();
+      // GetChatsessionList();
     }
     
   }, [userInfo]);

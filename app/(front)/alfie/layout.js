@@ -1,15 +1,13 @@
 "use client";
 
-import { PgpGptProvider } from "@/app/context/PgpGptContext";
-import GptRightDashboardSidebar from "@/components/Header/GptRightDashboardSidebar";
+import { AlfieGptProvider } from "@/app/context/AlfieGptContext";
 
 export default function AuthLayout({ children }) {
   return (
     <>
-      <PgpGptProvider>
-        <GptRightDashboardSidebar />
+      <AlfieGptProvider>
         {children}
-      </PgpGptProvider>
+      </AlfieGptProvider>
 
     </>
   );

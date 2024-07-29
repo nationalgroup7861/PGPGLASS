@@ -11,6 +11,7 @@ import Nav from "./Nav";
 import UserMenu from "./UserMenu";
 import { useEffect, useState } from "react";
 import ls from "localstorage-slim";
+import { usePathname } from "next/navigation";
 
 const HeaderDashboard = ({ display }) => {
   const {
@@ -22,6 +23,9 @@ const HeaderDashboard = ({ display }) => {
     setActiveMobileMenu,
   } = useAppContext();
   const [userInfo,setUserInfo]=useState("")
+  const pathname = usePathname()
+  console.log(pathname)
+
   useEffect(() => {
     const user_data = ls.get("pgp_user", { decrypt: true });
     setUserInfo(user_data)
@@ -100,6 +104,7 @@ const HeaderDashboard = ({ display }) => {
                   </div>
                 </div>
 
+                {pathname!="/alfie" &&
                 <div className={`expand-btn-grp ${display}`}>
                   <button
                     className={`bg-solid-primary popup-dashboardright-btn ${
@@ -109,7 +114,9 @@ const HeaderDashboard = ({ display }) => {
                   >
                     <i className="fa-sharp fa-regular fa-sidebar-flip"></i>
                   </button>
+               
                 </div>
+                 }
               </div>
             </div>
           </div>
