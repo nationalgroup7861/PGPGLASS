@@ -52,19 +52,19 @@
           "badge": ""
         },
         {
-          "link": "/",
+          "link": "/internalgpt",
           "isDisable": false,
           "title": "PGP-ProInsights",
           "badge": ""
         },
         {
-          "link": "/",
+          "link": "/alfie",
           "isDisable": false,
           "title": "ALFIE(Rebranding)",
           "badge": ""
         },
         {
-          "link": "/",
+          "link": "/researchgpt",
           "isDisable": false,
           "title": "Research GPT",
           "badge": ""
@@ -317,7 +317,7 @@
       "icon": ""
     },
     {
-      "link": "/",
+      "link": "/internalgpt",
       "isDisable": false,
       "type": "default",
       "img": "/images/icon/props_gpt_icon.png",
@@ -326,7 +326,7 @@
       "icon": ""
     },
     {
-      "link": "/",
+      "link": "/alfie",
       "isDisable": false,
       "type": "default",
       "img": "/images/icon/glass_gpt_icon2.png",
@@ -335,7 +335,7 @@
       "icon": ""
     },
     {
-      "link": "/",
+      "link": "/researchgpt",
       "isDisable": false,
       "type": "default",
       "img": "/images/icon/research_gpt_icon.png",
