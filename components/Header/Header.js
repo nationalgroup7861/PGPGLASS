@@ -91,7 +91,7 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
                     </button>
                   </div> */}
                     <Link className={`${btnClass}`} href={isAuth ? "/service" : "/signin"}>
-                    <span>{isAuth ? "Get Start": "Sigin" }</span>
+                    <span>{isAuth ? "Get Start": "Sig in" }</span>
                   </Link>
                 </div>
               </div>

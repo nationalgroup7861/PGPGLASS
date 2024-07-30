@@ -1,5 +1,10 @@
 "use client";
 
+import { ResearchGptContext } from "@/app/context/ResearchGptContext";
+import ResearchGptStaticBarDashboard from "@/components/Common/ResearchGptStaticBarDashboard";
+import ResearchGptGenerator from "@/section/researchgpt/ResearchGptGenerator";
+import { useContext } from "react";
+
 const CenteredMessage = ({ icon, message }) => (
   <div className="d-flex justify-content-center align-items-center vh-100">
     <div className="text-center">
@@ -22,34 +27,35 @@ const Loading = () => (
 
 
 const Research = () => {
+  const { chatgptKey, permissions,isLoading } = useContext(ResearchGptContext);
 
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  // if (!permissions?.Alfie_35) {
-  //   return <CenteredMessage icon="fa-shield-keyhole" message="Gpt 3.5 Is Not Activated for You" />;
-  // }
+  if (!permissions?.research_gpt) {
+    return <CenteredMessage icon="fa-shield-keyhole" message="Gpt 3.5 Is Not Activated for You" />;
+  }
 
-  // if (!chatgptKey) {
-  //   return <CenteredMessage icon="fa-key" message="Gpt 3.5 Key is Not Activated for You" />;
-  // }
+  if (!chatgptKey) {
+    return <CenteredMessage icon="fa-key" message="Research Gpt  Key is Not Activated for You" />;
+  }
 
   return (
     <>
-    {/* <div className="rbt-main-content">
+    <div className="rbt-main-content">
       <div className="rbt-daynamic-page-content">
         <div className="rbt-dashboard-content">
           <div className="content-page">
             <div className="chat-box-section">
-              <GptGenerator />
-              <GptStaticBarDashboard />
+              <ResearchGptGenerator />
+              <ResearchGptStaticBarDashboard />
             </div>
           </div>
         </div>
       </div>
-    </div> */}
-    <CenteredMessage icon="fa-shield-keyhole" message="To be Integrated" />
+    </div>
+    {/* <CenteredMessage icon="fa-shield-keyhole" message="To be Integrated" /> */}
     </>
   );
 };

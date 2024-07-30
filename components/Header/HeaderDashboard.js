@@ -24,7 +24,6 @@ const HeaderDashboard = ({ display }) => {
   } = useAppContext();
   const [userInfo,setUserInfo]=useState("")
   const pathname = usePathname()
-  console.log(pathname)
 
   useEffect(() => {
     const user_data = ls.get("pgp_user", { decrypt: true });
@@ -63,11 +62,11 @@ const HeaderDashboard = ({ display }) => {
               </div>
             </div>
 
-            {/* <div className="col-lg-6 d-none d-lg-block text-center">
+            <div className="col-lg-6 d-none d-lg-block text-center">
               <nav className="mainmenu-nav d-none d-lg-block text-center">
-                <Nav />
+                {/* <Nav /> */}
               </nav>
-            </div> */}
+            </div>
 
             <div className="col-lg-3 col-md-6 col-6">
               <div className="header-right">

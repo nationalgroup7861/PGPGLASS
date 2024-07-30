@@ -56,27 +56,37 @@ const GptForm = () => {
       apiKey: chatgptKey,
       dangerouslyAllowBrowser: true,
     });
-    const modifiedQuery = `${query} glass bottle`;
+    const modifiedQuery = `${query}`;
 
     const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: modifiedQuery }],
-      model: "gpt-4",
-      stream: true,
-      temperature: 1,
-      max_tokens: 256,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
+      messages: [{ role: "user", content: query }],
+      model: "gpt-3.5-turbo",
     });
+    return chatCompletion.choices[0].message["content"];
 
-    let content = "";
 
-    for await (const chunk of chatCompletion) {
-      content += chunk.choices[0]?.delta?.content || "";
 
-    }
+    // const chatCompletion = await openai.chat.completions.create({
+    //   messages: [{ role: "user", content: modifiedQuery }],
+    //   model: "gpt-3.5-turbo",
+    //   // stream: true,
+    //   // temperature: 1,
+    //   // max_tokens: 256,
+    //   // top_p: 1,
+    //   // frequency_penalty: 0,
+    //   // presence_penalty: 0,
+    // });
 
-    return content;
+    // let content = "";
+
+    // for await (const chunk of chatCompletion) {
+    //   content += chunk.choices[0]?.delta?.content || "";
+
+    // }
+
+    
+
+    // return content;
   }
 
   const exportChatData = async () => {

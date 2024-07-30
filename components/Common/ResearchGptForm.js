@@ -1,18 +1,15 @@
 "use client";
 
-import { GlassGptContext } from "@/app/context/GlassGptContext";
+import { ResearchGptContext } from "@/app/context/ResearchGptContext";
 import { exportToExcel } from "@/extra/ChatReport";
 import axios from "axios";
-import OpenAI from "openai";
 import { useContext, useEffect, useState } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Tooltip } from "react-tooltip";
 
-const ServiceForm = () => {
-  const { CreateMessage, userInfo, chatHistory, currentChatSession, setChatHistory, setChatSessionList, chatgptKey, UpdateCurrentChatSessionTitle, inputValue, setInputValue } = useContext(GlassGptContext);
+const ResearchGptForm = () => {
+  const { CreateMessage, userInfo, chatHistory, currentChatSession, setChatHistory, setChatSessionList, chatgptKey, UpdateCurrentChatSessionTitle, inputValue, setInputValue } = useContext(ResearchGptContext);
   const [isQuery, setIsQuery] = useState(false);
-
-
 
   const {
     transcript,
@@ -24,9 +21,8 @@ const ServiceForm = () => {
   const handelQueryChange = async (name, row) => {
 
     setIsQuery(true);
-    const answer = await GetOpenAi(row);
-    // const answer1 = await GetPERPLEXITY(row);
-    
+    const answer = await GetPERPLEXITY(row);
+
     if (chatHistory.length === 0) {
       const chatSessionList =
         JSON.parse(localStorage.getItem("chatSessionList")) || [];
@@ -40,7 +36,7 @@ const ServiceForm = () => {
       const data = {
         session_key: currentChatSession?.session_key,
         title: row,
-        type: "glassgpt",
+        type: "researchgpt",
       }
       UpdateCurrentChatSessionTitle(data)
     }
@@ -56,40 +52,34 @@ const ServiceForm = () => {
   };
 
 
-  
+   async function GetPERPLEXITY(query) {
 
-  async function GetOpenAi(query) {
-    const openai = new OpenAI({
-      apiKey: chatgptKey,
-      dangerouslyAllowBrowser: true,
-    });
-    const modifiedQuery = `${query} glass bottle`;
+    const messages = [
+      { role: 'user', content: query },
+    ];
 
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: modifiedQuery }],
-      model: "gpt-4",
-      stream: true,
-      temperature: 1,
-      max_tokens: 256,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
+    const options = {
+      method: 'POST',
+      url: 'https://api.perplexity.ai/chat/completions',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${chatgptKey}`,
+      },
+      data: {
+        model: "llama-3-sonar-small-32k-online",
+        messages: messages,
+      },
+    };
+    const response = await axios(options);
+    return response.data.choices[0].message.content
+     
+  };
 
-    let content = "";
-
-    for await (const chunk of chatCompletion) {
-      content += chunk.choices[0]?.delta?.content || "";
-
-    }
-
-    return content;
-  }
 
   const exportChatData = async () => {
     exportToExcel(chatHistory, userInfo);
   };
-
 
 
   //verify now
@@ -179,4 +169,4 @@ const ServiceForm = () => {
   );
 };
 
-export default ServiceForm;
+export default ResearchGptForm;

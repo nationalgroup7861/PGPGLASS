@@ -1,15 +1,15 @@
 "use client";
 
-import { PgpGptProvider } from "@/app/context/PgpGptContext";
-import GptRightDashboardSidebar from "@/components/Header/GptRightDashboardSidebar";
+import { ResearchGptProvider } from "@/app/context/ResearchGptContext";
+import ResearchGptRightDashboardSidebar from "@/components/Header/ResearchGptRightDashboardSidebar";
 
 export default function AuthLayout({ children }) {
   return (
     <>
-      <PgpGptProvider>
-        <GptRightDashboardSidebar />
+      <ResearchGptProvider>
+        <ResearchGptRightDashboardSidebar />
         {children}
-      </PgpGptProvider>
+      </ResearchGptProvider>
 
     </>
   );

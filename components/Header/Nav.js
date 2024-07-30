@@ -9,6 +9,7 @@ import MenuData from "../../data/header.json";
 
 import NavProps from "./NavProps";
 import menuImg from "../../public/images/menu-img/menu-img-2.png";
+import { selectToCountry, selectToSAS } from "@/app/util/extra";
 
 const Nav = () => {
   const pathname = usePathname();
@@ -27,9 +28,24 @@ const Nav = () => {
 
   const isActive = (href) => pathname.startsWith(href);
 
+  const [selectedSAS, setSelectedSAS] = useState(selectToSAS[0]);
+  const [selectedCountry, setSelectedCountry] = useState(selectToCountry[0]);
+
+  const handleSelectSAS = (id) => {
+    const selected = selectToSAS.find(item => item.id === id);
+    setSelectedSAS(selected);
+  };
+
+  const handleSelectCountry = (id) => {
+    const selected = selectToCountry.find(item => item.id === id);
+    setSelectedCountry(selected);
+  };
+
+
+
   return (
     <>
-      <ul className="mainmenu">
+      {/* <ul className="mainmenu">
         {MenuData &&
           MenuData.nav.map((data, index) => (
             <li
@@ -126,7 +142,110 @@ const Nav = () => {
               )}
             </li>
           ))}
+      </ul> */}
+{/* 
+<div className="mt-4 d-flex sm:ml-4 sm:mt-0">
+      <select
+        value={selectedSasValue}
+        onChange={handleSasValue}
+        className=""
+      >
+        {selectToSAS.map((option, index) => (
+          <option key={index} value={option.name}>
+            {option.name}
+          </option>
+        ))}
+      </select>
+
+      <select
+        value={selectedCountryValue}
+        onChange={handleCountryValue}
+        className="ml-2 form-select rounded-sm bg-white border-0 w-100 max-w-xs"
+      >
+        {selectToCountry.map((option, index) => (
+          <option key={index} value={option.name}>
+            {option.name}
+          </option>
+        ))}
+      </select>
+    </div> */}
+
+{/* <div className="dropdown history-box-dropdown">
+      <button
+        type="button"
+        className="btn btn-outline-primary btn-lg dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {selectedValue.name}
+      </button>
+      <ul className="dropdown-menu style-one">
+        {selectToSAS.map((item) => (
+          <li key={item.id}>
+            <a
+              className={`dropdown-item ${selectedValue.id === item.id ? 'active' : ''}`}
+              href="#"
+              onClick={() => handleSelect(item.id)}
+            >
+              {item.name}
+            </a>
+          </li>
+        ))}
       </ul>
+    </div>    */}
+     
+     <div className="d-flex flex-column flex-md-row ">
+        {/* SAS Dropdown */}
+        <div className="dropdown history-box-dropdown me-md-2 mb-2 mb-md-0">
+          <button
+            type="button"
+            className="btn btn-outline-primary btn-lg dropdown-toggle btn-outline-custom"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {selectedSAS.name}
+          </button>
+          <ul className="dropdown-menu style-one">
+            {selectToSAS.map((item) => (
+              <li key={item.id}>
+                <a
+                  className={`dropdown-item ${selectedSAS.id === item.id ? 'active' : ''}`}
+                  href="#"
+                  onClick={() => handleSelectSAS(item.id)}
+                >
+                  {item.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Country Dropdown */}
+        <div className="dropdown history-box-dropdown ms-md-2">
+          <button
+            type="button"
+            className="btn btn-outline-primary btn-lg dropdown-toggle btn-outline-custom"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {selectedCountry.name}
+          </button>
+          <ul className="dropdown-menu style-one">
+            {selectToCountry.map((item) => (
+              <li key={item.id}>
+                <a
+                  className={`dropdown-item ${selectedCountry.id === item.id ? 'active' : ''}`}
+                  href="#"
+                  onClick={() => handleSelectCountry(item.id)}
+                >
+                  {item.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    
     </>
   );
 };

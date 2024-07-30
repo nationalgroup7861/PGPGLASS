@@ -197,7 +197,38 @@
         font-size: var(--font-size-b1);
     }
 } 
+// .btn-outline-custom {
+//     color:var(--color-primary); /* Replace with your custom color */
+//     border-color: var(--color-primary); /* Replace with your custom color */
+//   }
+  
+//   .btn-outline-custom:hover {
+//     background-color: var(--color-primary); /* Replace with your custom color */
+//     border-color: var(--color-primary);/* Replace with your custom color */
+//   }
 
+  .btn-outline-custom {
+    color: var(--color-primary); /* Custom text color */
+    border-color: var(--color-primary); /* Custom border color */
+  }
+  
+  .btn-outline-custom:hover,
+  .btn-outline-custom:active,
+  .btn-outline-custom:focus,
+  .btn-outline-custom.dropdown-toggle.show {
+    background-color: var(--color-primary); /* Custom background color on hover and active */
+    color: #fff; /* Custom text color on hover and active */
+    border-color: var(--color-primary); /* Custom border color on hover and active */
+  }
+  
+  .dropdown-item.active,
+  .dropdown-item.active:hover,
+  .dropdown-item.active:focus {
+    background-color: var(--color-primary); /* Custom background color for active item */
+    color: #fff; /* Custom text color for active item */
+  }
+  
+  
 
 
 
