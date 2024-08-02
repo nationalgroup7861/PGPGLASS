@@ -77,7 +77,7 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
               <div className="header-right">
                 <div className="header-btn">
                   <Link className={`${btnClass}`} href={isAuth ? "/service" : "/signin"}>
-                    <span>{isAuth ? "Get Start": "Sigin" }</span>
+                    <span>{isAuth ? "Get Start": "Sign in" }</span>
                   </Link>
                 </div>
 
@@ -91,7 +91,7 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
                     </button>
                   </div> */}
                     <Link className={`${btnClass}`} href={isAuth ? "/service" : "/signin"}>
-                    <span>{isAuth ? "Get Start": "Sig in" }</span>
+                    <span>{isAuth ? "Get Start": "Sign in" }</span>
                   </Link>
                 </div>
               </div>
