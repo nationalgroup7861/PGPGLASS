@@ -10,6 +10,7 @@ import DocImg from "../../public/images/icons/document-file.png";
 import { ResearchGptContext } from "@/app/context/ResearchGptContext";
 import Reaction from "@/components/Common/Reaction";
 import TopBar from "@/components/Common/TopBar";
+import { marked } from "marked";
 
 const ResearchGptGenerator = () => {
   const { chatHistory,currentChatSession } = useContext(ResearchGptContext);
@@ -41,6 +42,13 @@ const ResearchGptGenerator = () => {
     setEditableIndex(null);
     setEditedText("");
   };
+
+    const createMarkup = (text) => {
+    // Optionally convert markdown to HTML
+    const html = marked(text);
+    return { __html: html };
+  };
+
 
   return (
     <>
@@ -131,7 +139,8 @@ const ResearchGptGenerator = () => {
                         Bot
                       </span>
                     </h6>
-                    <p className="">{data.content}</p>
+                    {/* <p className="">{data.content}</p> */}
+                    <div dangerouslySetInnerHTML={createMarkup(data.content)} />
                     <Reaction />
                   </div>
                 </div>

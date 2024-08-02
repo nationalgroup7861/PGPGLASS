@@ -40,7 +40,7 @@ function ApiProvider({ children }) {
       throw error;
     }
   }
-  async function getApiData(url, params = {}, signal,showToast = true) {
+  async function getApiData(url, params = {}, signal,showToast = false) {
     try {
       const response = await apiGetData(url, params, signal);
     showToast &&  toast.success("success", {
