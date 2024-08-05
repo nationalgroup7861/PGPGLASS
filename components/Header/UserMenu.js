@@ -25,7 +25,7 @@ const UserMenu = ({userInfo}) => {
             <span className="name">{userInfo?.name}</span>
             <Link
               className="rbt-btn-link color-primary"
-              href="/"
+              href="#"
             >
               View Profile
             </Link>

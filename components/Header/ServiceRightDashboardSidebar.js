@@ -15,7 +15,8 @@ dayjs.extend(isBetween);
 
 const ServiceRightDashboardSidebar = () => {
   const { shouldCollapseRightbar } = useAppContext();
-  const { chatSessionList,GetCurrentsessionMessageList,currentChatSession, setCurrentChatSession,handleNewSessionClick } = useContext(GlassGptContext);
+  const { chatSessionList,GetCurrentsessionMessageList,currentChatSession, setCurrentChatSession,handleNewSessionClick,searchKeyword, setSearchKeyword } = useContext(GlassGptContext);
+  const [searchTerm, setSearchTerm] = useState(searchKeyword || '');
 
   const today = dayjs();
   const yesterday = dayjs().subtract(1, 'day');
@@ -74,6 +75,11 @@ const ServiceRightDashboardSidebar = () => {
     // setCurrentChatSession(currentChatSessionkey);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setSearchKeyword(event.target.value);
+  };
+
 
   return (
     <div
@@ -105,8 +111,11 @@ const ServiceRightDashboardSidebar = () => {
         </a>
       </div>
       <div className="right-side-bottom">
-        <div className="small-search search-section mb--20">
-          <input type="search" placeholder="Search Here..." />
+      <div className="small-search search-section mb--20">
+          <input type="search" placeholder="Search Here..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <i className="feather-search"></i>
         </div>
 

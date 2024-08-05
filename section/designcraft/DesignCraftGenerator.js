@@ -49,6 +49,7 @@ const DesignCraftGenerator = () => {
         title={currentChatSession?.title}
         wdt={14}
         htd={18}
+        currentChatSession={currentChatSession}
       />
       {textGeneratorData &&
         textGeneratorData.slice().reverse().map((data, index) => (

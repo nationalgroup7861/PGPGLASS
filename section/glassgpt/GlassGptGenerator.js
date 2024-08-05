@@ -52,6 +52,8 @@ const GlassGptGenerator = () => {
         title={currentChatSession?.title}
         wdt={14}
         htd={18}
+        currentChatSession={currentChatSession}
+
       />
       {textGeneratorData &&
         textGeneratorData.slice()
@@ -134,7 +136,9 @@ const GlassGptGenerator = () => {
                         Bot
                       </span>
                     </h6>
-                    <p className="">{data.content}</p>
+                    {/* <p className="">{data.content}</p> */}
+                    <div dangerouslySetInnerHTML={createMarkup(data.content)} />
+
                     <Reaction />
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import DocImg from "../../public/images/icons/document-file.png";
 import { PgpGptContext } from "@/app/context/PgpGptContext";
 import Reaction from "@/components/Common/Reaction";
 import TopBar from "@/components/Common/TopBar";
+import { createMarkup } from "@/app/util/extra";
 
 const GptGenerator = () => {
   const { chatHistory,currentChatSession } = useContext(PgpGptContext);
@@ -49,6 +50,8 @@ const GptGenerator = () => {
         title={currentChatSession?.title}
         wdt={14}
         htd={18}
+        currentChatSession={currentChatSession}
+
       />
       {textGeneratorData &&
         textGeneratorData.slice()
@@ -131,7 +134,9 @@ const GptGenerator = () => {
                         Bot
                       </span>
                     </h6>
-                    <p className="">{data.content}</p>
+                    {/* <p className="">{data.content}</p> */}
+                    <div dangerouslySetInnerHTML={createMarkup(data.content)} />
+
                     <Reaction />
                   </div>
                 </div>

@@ -1,3 +1,5 @@
+import { marked } from "marked";
+
 export const generateChatKey = () => {
     const timestamp = new Date().getTime();
     const randomNumber = Math.floor(Math.random() * 100000);
@@ -135,3 +137,11 @@ export const generateChatKey = () => {
     },
   ];
     
+
+  export const createMarkup = (text) => {
+    // Optionally convert markdown to HTML
+    const html = marked(text);
+    return { __html: html };
+  };
+
+

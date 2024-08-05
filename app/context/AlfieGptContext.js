@@ -31,10 +31,10 @@ function AlfieGptProvider({ children }) {
       const response = await getApiData(CHATSESSION_API.list + userInfo.id,params);
       if (response) {
         const data = response.data.result.chatSessions;
-        if (data.length == 0) {
-          handleNewSessionClick();
-        }
-        else {
+        // if (data.length == 0) {
+        //   handleNewSessionClick();
+        // }
+        // else {
           localStorage.setItem(
             "chatSessionList",
             JSON.stringify(data)
@@ -52,7 +52,7 @@ function AlfieGptProvider({ children }) {
           }
           setChatSessionList(data);
 
-        }
+        // }
 
       }
       setIsLoading(false)

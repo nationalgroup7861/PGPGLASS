@@ -29,6 +29,7 @@ export const CHATSESSION_API = {
   list: "/chat-session/getByClientId/",
   delete:"/chat-session/delete/",
   updateTitle:"/chat-session/updateTitle",
+  updateStatus:"/chat-session/updateStatus",
 
 };
 

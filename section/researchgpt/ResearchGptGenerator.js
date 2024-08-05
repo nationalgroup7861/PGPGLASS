@@ -10,7 +10,8 @@ import DocImg from "../../public/images/icons/document-file.png";
 import { ResearchGptContext } from "@/app/context/ResearchGptContext";
 import Reaction from "@/components/Common/Reaction";
 import TopBar from "@/components/Common/TopBar";
-import { marked } from "marked";
+import { createMarkup } from "@/app/util/extra";
+// import { marked } from "marked";
 
 const ResearchGptGenerator = () => {
   const { chatHistory,currentChatSession } = useContext(ResearchGptContext);
@@ -43,11 +44,11 @@ const ResearchGptGenerator = () => {
     setEditedText("");
   };
 
-    const createMarkup = (text) => {
-    // Optionally convert markdown to HTML
-    const html = marked(text);
-    return { __html: html };
-  };
+  //   const createMarkup = (text) => {
+  //   // Optionally convert markdown to HTML
+  //   const html = marked(text);
+  //   return { __html: html };
+  // };
 
 
   return (
@@ -55,6 +56,7 @@ const ResearchGptGenerator = () => {
       <TopBar
         barImg={DocImg}
         title={currentChatSession?.title}
+        currentChatSession={currentChatSession}
         wdt={14}
         htd={18}
       />

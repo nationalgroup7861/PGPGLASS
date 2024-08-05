@@ -15,7 +15,8 @@ dayjs.extend(isBetween);
 
 const ResearchGptRightDashboardSidebar = () => {
   const { shouldCollapseRightbar } = useAppContext();
-  const { chatSessionList,GetCurrentsessionMessageList,currentChatSession, setCurrentChatSession,handleNewSessionClick } = useContext(ResearchGptContext);
+  const { chatSessionList, GetCurrentsessionMessageList, currentChatSession, setCurrentChatSession, handleNewSessionClick, searchKeyword, setSearchKeyword } = useContext(ResearchGptContext);
+  const [searchTerm, setSearchTerm] = useState(searchKeyword || '');
 
   const today = dayjs();
   const yesterday = dayjs().subtract(1, 'day');
@@ -73,6 +74,10 @@ const ResearchGptRightDashboardSidebar = () => {
     setCurrentChatSession(currentChat)
     // setCurrentChatSession(currentChatSessionkey);
   };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setSearchKeyword(event.target.value);
+  };
 
 
   return (
@@ -106,7 +111,10 @@ const ResearchGptRightDashboardSidebar = () => {
       </div>
       <div className="right-side-bottom">
         <div className="small-search search-section mb--20">
-          <input type="search" placeholder="Search Here..." />
+          <input type="search" placeholder="Search Here..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <i className="feather-search"></i>
         </div>
 
@@ -119,9 +127,9 @@ const ResearchGptRightDashboardSidebar = () => {
             >
               <h6 className="title">{key.replace(/([A-Z])/g, ' $1')}</h6>
               <ul className="chat-history-list has-show-more-inner-content">
-                <SingleRightPanel 
-                RightPanelData={sessions}                   
-                handleCurrentChat={handleCurrentChat}
+                <SingleRightPanel
+                  RightPanelData={sessions}
+                  handleCurrentChat={handleCurrentChat}
                 />
               </ul>
               <div

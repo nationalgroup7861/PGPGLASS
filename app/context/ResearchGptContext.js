@@ -22,16 +22,19 @@ function ResearchGptProvider({ children }) {
   const [userInfo, setUserInfo] = useState({});
   const { getApiData, postApiData } = useContext(ApiContext);
   const [inputValue, setInputValue] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const controller = new AbortController();
+  const { signal } = controller;
 
 
   async function GetChatsessionList() {
     setIsLoading(true)
     try {
-      const params = { client_id: userInfo.id, type: "researchgpt" };
-      const response = await getApiData(CHATSESSION_API.list + userInfo.id,params);
+      const params = { client_id: userInfo.id, type: "researchgpt",status:"1",search:searchKeyword };
+      const response = await getApiData(CHATSESSION_API.list + userInfo.id,params,signal);
       if (response) {
         const data = response.data.result.chatSessions;
-        if (data.length == 0) {
+        if (data.length == 0  && searchKeyword.length==0) {
           handleNewSessionClick();
         }
         else {
@@ -53,7 +56,8 @@ function ResearchGptProvider({ children }) {
           setChatSessionList(data);
 
         }
-
+      
+      
       }
       setIsLoading(false)
     } catch (error) {
@@ -65,7 +69,7 @@ function ResearchGptProvider({ children }) {
     setIsLoading(true)
     try {
       const params = {  };
-      const response = await getApiData(CLIENT_API.clientpermissions + userInfo.id,params);
+      const response = await getApiData(CLIENT_API.clientpermissions + userInfo.id,params,signal);
       if (response) {
         const data = response.data.result;
         const parsedPermissions = JSON.parse(data.permissions);
@@ -109,26 +113,27 @@ function ResearchGptProvider({ children }) {
   
 
   useEffect(() => {
-    let user_type;
     let user_data;
     if (typeof window !== "undefined") {
       user_data = ls.get("pgp_user", { decrypt: true });
       setUserInfo(user_data);
     }
-   
   }, []);
 
 
-  
   useEffect(() => {
     if (userInfo?.id) {
       localStorage.removeItem("chatSessionList")
       localStorage.removeItem("currentChatSession")
       GetPermissionandkey();
       GetChatsessionList();
+      return () => {
+        controller.abort();
+    };
     }
     
-  }, [userInfo]);
+  }, [userInfo,searchKeyword]);
+
 
   useEffect(() => {
     if (userInfo?.id) {
@@ -178,6 +183,19 @@ function ResearchGptProvider({ children }) {
     }
   }
 
+
+  async function UpdateCurrentChatSessionStatus(data) {
+    try {
+      
+      const response = await postApiData(CHATSESSION_API.updateStatus, data);
+      if (response) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   async function CreateMessage(data) {
     try {
       const response = await postApiData(MESSAGE_API.create, data);
@@ -213,6 +231,8 @@ function ResearchGptProvider({ children }) {
          CreateMessage,
         handlePageRefresh,
         handleNewSessionClick,
+        searchKeyword,
+        setSearchKeyword,
         isLoading
       }}
     >

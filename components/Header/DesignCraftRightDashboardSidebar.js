@@ -15,7 +15,8 @@ dayjs.extend(isBetween);
 
 const DesignCraftRightDashboardSidebar = () => {
   const { shouldCollapseRightbar } = useAppContext();
-  const { chatSessionList,GetCurrentsessionMessageList,currentChatSession, setCurrentChatSession,handleNewSessionClick } = useContext(DesignGptContext);
+  const { chatSessionList,GetCurrentsessionMessageList,currentChatSession, setCurrentChatSession,handleNewSessionClick,searchKeyword, setSearchKeyword } = useContext(DesignGptContext);
+  const [searchTerm, setSearchTerm] = useState(searchKeyword || '');
 
   const today = dayjs();
   const yesterday = dayjs().subtract(1, 'day');
@@ -73,6 +74,11 @@ const DesignCraftRightDashboardSidebar = () => {
     setCurrentChatSession(currentChat)
     // setCurrentChatSession(currentChatSessionkey);
   };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setSearchKeyword(event.target.value);
+  };
+
 
 
   return (
@@ -105,8 +111,11 @@ const DesignCraftRightDashboardSidebar = () => {
         </a>
       </div>
       <div className="right-side-bottom">
-        <div className="small-search search-section mb--20">
-          <input type="search" placeholder="Search Here..." />
+      <div className="small-search search-section mb--20">
+          <input type="search" placeholder="Search Here..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <i className="feather-search"></i>
         </div>
 
