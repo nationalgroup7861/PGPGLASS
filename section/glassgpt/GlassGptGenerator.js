@@ -10,7 +10,7 @@ import DocImg from "../../public/images/icons/document-file.png";
 import { GlassGptContext } from "@/app/context/GlassGptContext";
 import Reaction from "@/components/Common/Reaction";
 import TopBar from "@/components/Common/TopBar";
-
+import { createMarkup } from "@/app/util/extra";
 const GlassGptGenerator = () => {
   const { chatHistory,currentChatSession } = useContext(GlassGptContext);
 
